@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin") // admin, super_admin
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Treatment {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  description String
+  fullDescription String? @map("full_description")
+  price       Float?
+  heroImage   String?  @map("hero_image")
+  gallery     String   @default("[]") // JSON string de URLs de imagens
+  benefits    String   @default("[]") // JSON string de benefícios
+  observations String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  reviews      Review[]
+
+  @@map("treatments")
+}
+
+model Appointment {
+  id                String   @id @default(uuid())
+  name              String
+  phone             String
+  email             String
+  selectedTreatments String  @default("[]") @map("selected_treatments") // JSON string de IDs
+  datePreferred     String?  @map("date_preferred")
+  timePreferred     String?  @map("time_preferred")
+  notes             String?
+  status            String   @default("pending") // pending, confirmed, cancelled, completed
+  honeypot          String?  // Campo anti-bot
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  treatmentId       String?  @map("treatment_id")
+  treatment         Treatment? @relation(fields: [treatmentId], references: [id])
+
+  @@map("appointments")
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  name        String
+  rating      Int      // 1 a 5
+  comment     String
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  treatmentId String?  @map("treatment_id")
+  treatment   Treatment? @relation(fields: [treatmentId], references: [id])
+
+  @@map("reviews")
+}
+
+model ClinicInfo {
+  id          String   @id @default(uuid())
+  address     String
+  phone       String
+  email       String?
+  whatsapp    String?
+  instagram   String?
+  facebook    String?
+  workingHours String? @map("working_hours")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("clinic_info")
+}
+
+

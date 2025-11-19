@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Odonto Azul | Sobre Nós - Nossa História e Equipe</title>
+    <meta name="description" content="Conheça a Clínica Odonto Azul: nossa missão, equipe qualificada, instalações modernas e avaliações dos pacientes. Odontologia de excelência em Campo Grande/MS.">
+    <meta name="keywords" content="sobre clínica odontológica, equipe dentista, instalações odontologia, avaliações pacientes">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.odontoazul.com.br/sobre.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Azuis Primários Premium */
+            --primary-blue: #0D5B82;
+            --primary-blue-dark: #0A4A6B;
+            --primary-blue-light: #0F6B99;
+            --blue-ice-medium: #B8D9E3;
+            --blue-ice: #D1E7ED;
+            --blue-ice-light: #E8F4F8;
+            
+            /* Cinzas Grafite */
+            --gray-dark: #2C3E50;
+            --gray-primary: #34495E;
+            --gray-light: #5D6D7E;
+            --gray-neutral: #ADB5BD;
+            --gray-neutral-medium: #DEE2E6;
+            --gray-neutral-light: #E9ECEF;
+            --gray-neutral-very-light: #F5F7FA;
+            
+            /* Brancos */
+            --white: #FFFFFF;
+            --white-warm: #FAFBFC;
+            
+            /* CTAs */
+            --cta-primary: #0D5B82;
+            --cta-hover: #0F6B99;
+            --cta-active: #0A4A6B;
+            
+            /* Textos */
+            --text-primary: #2C3E50;
+            --text-body: #34495E;
+            --text-secondary: #5D6D7E;
+            
+            /* Fundos */
+            --bg-primary: #FFFFFF;
+            --bg-alternate: #FAFBFC;
+            --bg-section: #E8F4F8;
+            --bg-card: #FFFFFF;
+            --bg-footer: #2C3E50;
+            
+            /* Bordas */
+            --border-card: #E9ECEF;
+            --border-input: #DEE2E6;
+            --border-focus: #0D5B82;
+            
+            /* Sombras Premium */
+            --shadow-sm: 0 1px 2px 0 rgba(10, 74, 107, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(10, 74, 107, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(10, 74, 107, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(10, 74, 107, 0.1);
+            
+            /* Compatibilidade */
+            --secondary-blue: #E8F4F8;
+            --gray-50: #FAFBFC;
+            --gray-100: #F5F7FA;
+            --gray-200: #E9ECEF;
+            --gray-600: #5D6D7E;
+            --gray-700: #34495E;
+            --gray-900: #2C3E50;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-body);
+            background: var(--bg-primary);
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:focus {
+            outline: 2px solid var(--cta-focus);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Seções */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Fotos da Clínica */
+        .clinic-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .clinic-photo {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .clinic-photo:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .clinic-photo img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .clinic-photo-label {
+            padding: 1rem;
+            background: var(--white);
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Texto Institucional */
+        .institutional-text {
+            background: var(--bg-alternate);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-card);
+            margin: 3rem 0;
+            line-height: 1.8;
+            color: var(--text-body);
+            font-size: 1.05rem;
+        }
+
+        /* Botões */
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--cta-primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:hover {
+            background: var(--cta-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-primary:focus {
+            outline: 3px solid var(--cta-focus);
+            outline-offset: 2px;
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: transparent;
+            color: var(--primary-blue);
+            text-decoration: none;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue-light);
+            transform: translateY(-2px);
+        }
+
+        /* Fotos do Doutor */
+        .doctor-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .doctor-photo {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .doctor-photo:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .doctor-photo img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Avaliações */
+        .reviews-section {
+            background: var(--bg-section);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .review-stars {
+            color: #FBBF24;
+            font-size: 1.25rem;
+        }
+
+        .review-comment {
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        /* Rodapé */
+        .footer {
+            background: var(--bg-footer);
+            color: var(--white);
+            padding: 3rem 1.5rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--gray-200);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-700);
+            color: var(--gray-400);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .clinic-photos,
+            .doctor-photos {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo" aria-label="Clínica Odonto Azul - Página inicial">🦷 Clínica Odonto Azul</a>
+            <nav aria-label="Navegação principal">
+                <ul class="nav-links">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="sobre.html" aria-current="page">Sobre</a></li>
+                    <li><a href="tratamentos.html">Tratamentos</a></li>
+                    <li><a href="agendamento.html">Agende</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>Sobre a Clínica</h1>
+            <p>Excelência em odontologia com tecnologia de ponta e atendimento humanizado</p>
+        </div>
+    </section>
+
+    <!-- Frase Bonita -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nossa Missão</h2>
+            <p class="section-subtitle">Transformar sorrisos e vidas através de tratamentos odontológicos de excelência, sempre com tecnologia avançada, segurança e muito carinho.</p>
+
+            <!-- Fotos da Clínica -->
+            <div class="clinic-photos">
+                <div class="clinic-photo">
+                    <img src="images/clinica-recepcao.jpg" alt="Recepção moderna e acolhedora da Clínica Odonto Azul" loading="lazy">
+                    <div class="clinic-photo-label">Clínica Odonto Azul · Recepção</div>
+                </div>
+                <div class="clinic-photo">
+                    <img src="images/clinica-sala.jpg" alt="Sala clínica equipada com tecnologia de ponta" loading="lazy">
+                    <div class="clinic-photo-label">Clínica Odonto Azul · Sala Clínica</div>
+                </div>
+            </div>
+
+            <!-- Texto Institucional -->
+            <div class="institutional-text">
+                <p>Com os mais avançados recursos de diagnóstico, planejamento e tratamento, nossa abordagem é sempre atual e segura. Nosso instrumental recebe esterilização perfeita em autoclave e nossos materiais são descartáveis e de alta qualidade. Estamos localizados em Campo Grande/MS, em frente ao Shopping Campo Grande, em modernas e confortáveis instalações, que oferecem ambiente agradável ao atendimento e ao trabalho do ortodontista. A somatória de um ambiente especialmente desenvolvido para a ortodontia e a capacitação dos profissionais resultam em um trabalho e um sorriso perfeitos.</p>
+            </div>
+
+            <!-- Botões -->
+            <div class="cta-buttons">
+                <a href="agendamento.html" class="btn-primary">Agende sua consulta</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fotos do Doutor -->
+    <section class="section" style="background: var(--bg-alternate);">
+        <div class="container">
+            <h2 class="section-title">Nossa Equipe</h2>
+            <p class="section-subtitle">Profissionais qualificados e dedicados ao seu sorriso</p>
+            
+            <div class="doctor-photos">
+                <div class="doctor-photo">
+                    <img src="images/doutor-1.jpg" alt="Dr. Odonto Azul - Profissional qualificado da equipe" loading="lazy">
+                </div>
+                <div class="doctor-photo">
+                    <img src="images/doutor-2.jpg" alt="Equipe profissional da Clínica Odonto Azul" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria Adicional da Clínica -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nossas Instalações</h2>
+            <p class="section-subtitle">Ambiente moderno e acolhedor para seu conforto</p>
+            
+            <div class="clinic-photos">
+                <div class="clinic-photo">
+                    <img src="images/clinica-sala-2.jpg" alt="Sala de atendimento moderna e confortável" loading="lazy">
+                    <div class="clinic-photo-label">Sala de Atendimento</div>
+                </div>
+                <div class="clinic-photo">
+                    <img src="images/clinica-equipamentos.jpg" alt="Equipamentos odontológicos modernos e de última geração" loading="lazy">
+                    <div class="clinic-photo-label">Equipamentos Modernos</div>
+                </div>
+                <div class="clinic-photo">
+                    <img src="images/clinica-consultorio.jpg" alt="Consultório odontológico equipado" loading="lazy">
+                    <div class="clinic-photo-label">Consultório</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Avaliações -->
+    <section class="section reviews-section">
+        <div class="container">
+            <h2 class="section-title">Avaliações dos Pacientes</h2>
+            <p class="section-subtitle">O que nossos pacientes dizem sobre nós</p>
+            
+            <div class="reviews-grid" id="reviewsGrid">
+                <div class="loading">Carregando avaliações...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Clínica Odonto Azul</h3>
+                <p>Transformando sorrisos com tecnologia e carinho.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p id="footerAddress">Av. Afonso Pena, 4909 – Campo Grande/MS</p>
+                <p id="footerPhone">+55 67 99999-0000</p>
+                <a href="agendamento.html">Agende online</a>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <a href="index.html">Início</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="tratamentos.html">Tratamentos</a>
+                <a href="agendamento.html">Agendamento</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Odonto Azul. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = window.API_BASE || 'http://localhost:3000/api';
+
+        // Carregar avaliações
+        async function loadReviews() {
+            try {
+                const response = await fetch(`${API_BASE}/home`);
+                const data = await response.json();
+                
+                const reviewsGrid = document.getElementById('reviewsGrid');
+                if (data.reviews && data.reviews.length > 0) {
+                    reviewsGrid.innerHTML = data.reviews.map(review => `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-name">${review.name}</div>
+                                <div class="review-stars">${'⭐'.repeat(review.rating)}</div>
+                            </div>
+                            <div class="review-comment">${review.comment}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    reviewsGrid.innerHTML = '<div class="loading">Nenhuma avaliação disponível.</div>';
+                }
+
+                // Atualizar rodapé
+                if (data.clinicInfo) {
+                    document.getElementById('footerAddress').textContent = data.clinicInfo.address || 'Av. Afonso Pena, 4909 – Campo Grande/MS';
+                    document.getElementById('footerPhone').textContent = data.clinicInfo.phone || '+55 67 99999-0000';
+                }
+            } catch (error) {
+                // Erro silencioso - não expor detalhes técnicos
+                document.getElementById('reviewsGrid').innerHTML = 
+                    '<div class="error">Erro ao carregar avaliações. Por favor, tente novamente mais tarde.</div>';
+            }
+        }
+
+        loadReviews();
+    </script>
+</body>
+</html>
+

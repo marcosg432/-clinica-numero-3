@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Odonto Azul | Início - Odontologia de Excelência em Campo Grande/MS</title>
+    <meta name="description" content="Clínica Odonto Azul oferece tratamentos odontológicos de excelência em Campo Grande/MS. Tecnologia avançada, profissionais qualificados e ambiente moderno. Agende sua consulta!">
+    <meta name="keywords" content="odontologia, clínica odontológica, dentista Campo Grande, tratamento odontológico, ortodontia, implante dentário">
+    <meta name="author" content="Clínica Odonto Azul">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Clínica Odonto Azul | Odontologia de Excelência">
+    <meta property="og:description" content="Transforme seu sorriso com tecnologia e carinho. Agende sua consulta na Clínica Odonto Azul em Campo Grande/MS.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.odontoazul.com.br">
+    <link rel="canonical" href="https://www.odontoazul.com.br/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Azuis Primários Premium */
+            --primary-blue: #0D5B82;
+            --primary-blue-dark: #0A4A6B;
+            --primary-blue-light: #0F6B99;
+            --blue-ice-medium: #B8D9E3;
+            --blue-ice: #D1E7ED;
+            --blue-ice-light: #E8F4F8;
+            
+            /* Cinzas Grafite */
+            --gray-dark: #2C3E50;
+            --gray-primary: #34495E;
+            --gray-light: #5D6D7E;
+            --gray-neutral: #ADB5BD;
+            --gray-neutral-medium: #DEE2E6;
+            --gray-neutral-light: #E9ECEF;
+            --gray-neutral-very-light: #F5F7FA;
+            
+            /* Brancos */
+            --white: #FFFFFF;
+            --white-warm: #FAFBFC;
+            
+            /* CTAs */
+            --cta-primary: #0D5B82;
+            --cta-hover: #0F6B99;
+            --cta-active: #0A4A6B;
+            --cta-focus: #B8D9E3;
+            
+            /* Textos */
+            --text-primary: #2C3E50;
+            --text-body: #34495E;
+            --text-secondary: #5D6D7E;
+            --text-placeholder: #ADB5BD;
+            
+            /* Fundos */
+            --bg-primary: #FFFFFF;
+            --bg-alternate: #FAFBFC;
+            --bg-section: #E8F4F8;
+            --bg-card: #FFFFFF;
+            --bg-footer: #2C3E50;
+            
+            /* Bordas */
+            --border-card: #E9ECEF;
+            --border-input: #DEE2E6;
+            --border-focus: #0D5B82;
+            
+            /* Sombras Premium */
+            --shadow-sm: 0 1px 2px 0 rgba(10, 74, 107, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(10, 74, 107, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(10, 74, 107, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(10, 74, 107, 0.1);
+            
+            /* Compatibilidade (mantido para não quebrar) */
+            --secondary-blue: #E8F4F8;
+            --gray-50: #FAFBFC;
+            --gray-100: #F5F7FA;
+            --gray-200: #E9ECEF;
+            --gray-600: #5D6D7E;
+            --gray-700: #34495E;
+            --gray-900: #2C3E50;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-body);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:focus {
+            outline: 2px solid var(--cta-focus);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Banner Principal */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            padding: 4rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-banner-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hero-slide.active {
+            opacity: 0.3;
+        }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 74, 107, 0.7) 0%, rgba(13, 91, 130, 0.7) 100%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-banner .subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--cta-primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 1s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--cta-hover);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-primary:focus {
+            outline: 3px solid var(--cta-focus);
+            outline-offset: 2px;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Seção de Boas-vindas */
+        .welcome-section {
+            padding: 4rem 1.5rem;
+            background: var(--bg-alternate);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Fotos da Clínica */
+        .clinic-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .clinic-photo {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .clinic-photo:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .clinic-photo img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .clinic-photo-label {
+            padding: 1rem;
+            background: var(--white);
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Texto Institucional */
+        .institutional-text {
+            background: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-card);
+            margin: 3rem 0;
+            line-height: 1.8;
+            color: var(--text-body);
+            font-size: 1.05rem;
+        }
+
+        /* Botões de Ação */
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: transparent;
+            color: var(--primary-blue);
+            text-decoration: none;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue-light);
+            transform: translateY(-2px);
+        }
+
+        /* Antes e Depois */
+        .before-after-section {
+            padding: 4rem 1.5rem;
+            background: var(--bg-primary);
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+
+        .before-after-carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 1.5rem;
+        }
+
+        .before-after-item {
+            min-width: calc(33.333% - 1rem);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .before-after-item:hover {
+            transform: scale(1.05);
+        }
+
+        .before-after-item img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            align-items: center;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gray-neutral-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary-blue);
+            width: 32px;
+            border-radius: 6px;
+        }
+
+        .carousel-dot:hover {
+            background: var(--primary-blue-light);
+        }
+
+        /* Carrossel de Tratamentos */
+        .treatments-section {
+            padding: 4rem 1.5rem;
+            background: var(--bg-section);
+        }
+
+        .treatments-carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            padding: 1rem 0;
+            margin: 2rem 0;
+        }
+
+        .treatments-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .treatments-carousel::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 4px;
+        }
+
+        .treatments-carousel::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        .treatment-card {
+            min-width: 280px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-card);
+            scroll-snap-align: start;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .treatment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .treatment-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .treatment-card p {
+            color: var(--text-body);
+            margin-bottom: 1rem;
+        }
+
+
+        /* Rodapé */
+        .footer {
+            background: var(--bg-footer);
+            color: var(--white);
+            padding: 3rem 1.5rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--gray-200);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-700);
+            color: var(--gray-400);
+        }
+
+        /* Animações */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-600);
+        }
+
+        .error {
+            background: #FEE2E2;
+            color: #DC2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #DC2626;
+        }
+
+        .loading {
+            color: var(--text-secondary);
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .before-after-item {
+                min-width: calc(50% - 0.75rem);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-banner {
+                min-height: 400px;
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-banner h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner {
+                min-height: 350px;
+                padding: 2.5rem 1.5rem;
+            }
+
+            .hero-banner h1 {
+                font-size: 2rem;
+            }
+
+            .hero-banner .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Menu mobile - melhorar acessibilidade */
+            .header-content {
+                position: relative;
+            }
+
+            .clinic-photos {
+                grid-template-columns: 1fr;
+            }
+
+            .before-after-item {
+                min-width: 100%;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .welcome-section,
+            .before-after-section,
+            .treatments-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-banner h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero-banner .subtitle {
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.875rem 2rem;
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo" aria-label="Clínica Odonto Azul - Página inicial">🦷 Clínica Odonto Azul</a>
+            <nav aria-label="Navegação principal">
+                <ul class="nav-links">
+                    <li><a href="index.html" aria-current="page">Início</a></li>
+                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="tratamentos.html">Tratamentos</a></li>
+                    <li><a href="agendamento.html">Agende</a></li>
+                </ul>
+    </nav>
+        </div>
+  </header>
+
+    <!-- Banner Principal -->
+    <section class="hero-banner">
+        <div class="hero-banner-slides" id="heroSlides">
+            <div class="hero-slide active" style="background-image: url('images/banner-1.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/banner-2.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/banner-3.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('images/banner-4.jpg');"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Bem-vindo</h1>
+            <p class="subtitle">Transforme seu sorriso com tecnologia e carinho</p>
+            <a href="agendamento.html" class="btn-primary">Agende sua consulta</a>
+      </div>
+    </section>
+
+    <!-- Seção de Boas-vindas -->
+    <section class="welcome-section">
+        <div class="container">
+            <h2 class="section-title">Bem-vindo à Clínica Odonto Azul</h2>
+            <p class="section-subtitle">Sua jornada para um sorriso perfeito começa aqui</p>
+
+            <!-- Fotos da Clínica -->
+            <div class="clinic-photos">
+                <div class="clinic-photo">
+                    <img src="images/clinica-recepcao.jpg" alt="Recepção moderna e acolhedora da Clínica Odonto Azul em Campo Grande/MS" loading="lazy">
+                    <div class="clinic-photo-label">Clínica Odonto Azul · Recepção</div>
+                </div>
+                <div class="clinic-photo">
+                    <img src="images/clinica-sala.jpg" alt="Sala clínica equipada com tecnologia de ponta da Clínica Odonto Azul" loading="lazy">
+                    <div class="clinic-photo-label">Clínica Odonto Azul · Sala Clínica</div>
+                </div>
+      </div>
+
+            <!-- Botões de Ação -->
+            <div class="cta-buttons">
+                <a href="sobre.html" class="btn-secondary">Conheça a clínica</a>
+                <a href="agendamento.html" class="btn-primary">Agende sua consulta</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Antes e Depois -->
+    <section class="before-after-section">
+        <div class="container">
+            <h2 class="section-title">Antes e Depois</h2>
+            <p class="section-subtitle">Veja os resultados reais dos nossos tratamentos</p>
+            
+            <div class="carousel-container">
+                <div class="before-after-carousel" id="beforeAfterCarousel">
+                    <div class="before-after-item">
+                        <img src="images/antes-depois-1.jpg" alt="Resultado de tratamento odontológico - Antes e depois" loading="lazy">
+                    </div>
+                    <div class="before-after-item">
+                        <img src="images/antes-depois-2.jpg" alt="Transformação do sorriso - Resultado de tratamento" loading="lazy">
+                    </div>
+                    <div class="before-after-item">
+                        <img src="images/antes-depois-3.jpg" alt="Antes e depois de tratamento odontológico realizado na clínica" loading="lazy">
+                    </div>
+                    <div class="before-after-item">
+                        <img src="images/antes-depois-4.jpg" alt="Resultado de tratamento - Sorriso transformado" loading="lazy">
+                    </div>
+                </div>
+                
+                <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+            <div class="cta-buttons">
+                <a href="agendamento.html" class="btn-primary">Agende sua consulta</a>
+      </div>
+      </div>
+    </section>
+
+    <!-- Carrossel de Tratamentos -->
+    <section class="treatments-section">
+        <div class="container">
+            <h2 class="section-title">Tratamentos Principais</h2>
+            <p class="section-subtitle">Conheça nossos principais serviços</p>
+            
+            <div class="treatments-carousel" id="treatmentsCarousel">
+                <!-- Tratamentos serão carregados via JavaScript -->
+                <div class="loading">Carregando tratamentos...</div>
+      </div>
+
+            <div class="cta-buttons">
+                <a href="tratamentos.html" class="btn-secondary">Ver todos os tratamentos</a>
+      </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+  <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Clínica Odonto Azul</h3>
+                <p>Transformando sorrisos com tecnologia e carinho.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p id="footerAddress">Av. Afonso Pena, 4909 – Campo Grande/MS</p>
+                <p id="footerPhone">+55 67 99999-0000</p>
+      <a href="agendamento.html">Agende online</a>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <a href="index.html">Início</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="tratamentos.html">Tratamentos</a>
+                <a href="agendamento.html">Agendamento</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Odonto Azul. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+    <script src="config.js"></script>
+    <script>
+        // API_BASE será definido por config.js ou usar padrão
+        const API_BASE = window.API_BASE || 'http://localhost:3000/api';
+
+        // Carregar tratamentos
+        async function loadTreatments() {
+            try {
+                const response = await fetch(`${API_BASE}/home`);
+                const data = await response.json();
+                
+                const carousel = document.getElementById('treatmentsCarousel');
+                if (data.treatments && data.treatments.length > 0) {
+                    carousel.innerHTML = data.treatments.map(treatment => `
+                        <div class="treatment-card">
+                            <h3>${treatment.title}</h3>
+                            <p>${treatment.description}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    carousel.innerHTML = '<div class="loading">Nenhum tratamento disponível.</div>';
+                }
+
+                // Atualizar rodapé
+                if (data.clinicInfo) {
+                    document.getElementById('footerAddress').textContent = data.clinicInfo.address || 'Av. Afonso Pena, 4909 – Campo Grande/MS';
+                    document.getElementById('footerPhone').textContent = data.clinicInfo.phone || '+55 67 99999-0000';
+                }
+            } catch (error) {
+                // Erro silencioso - não expor detalhes técnicos ao usuário
+                document.getElementById('treatmentsCarousel').innerHTML = 
+                    '<div class="error">Erro ao carregar tratamentos. Por favor, tente novamente mais tarde.</div>';
+            }
+        }
+
+        // Carrossel de Imagens de Fundo do Banner
+        let currentBannerSlide = 0;
+        const bannerSlides = document.querySelectorAll('.hero-slide');
+        const totalBannerSlides = bannerSlides.length;
+
+        function nextBannerSlide() {
+            bannerSlides[currentBannerSlide].classList.remove('active');
+            currentBannerSlide = (currentBannerSlide + 1) % totalBannerSlides;
+            bannerSlides[currentBannerSlide].classList.add('active');
+        }
+
+        // Trocar slide a cada 5 segundos
+        setInterval(nextBannerSlide, 5000);
+
+        // Carrossel Antes e Depois (Auto-play)
+        let currentSlide = 0;
+        const totalSlides = 4; // Total de imagens
+        const slidesPerView = 3; // Imagens visíveis por vez
+        const carousel = document.getElementById('beforeAfterCarousel');
+        const dotsContainer = document.getElementById('carouselDots');
+
+        // Criar dots
+        const totalPages = Math.ceil(totalSlides / slidesPerView);
+        for (let i = 0; i < totalPages; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function updateCarousel() {
+            const maxSlide = totalSlides - slidesPerView;
+            const translateX = -currentSlide * (100 / slidesPerView);
+            carousel.style.transform = `translateX(${translateX}%)`;
+            
+            // Atualizar dots
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            const activeDotIndex = Math.floor(currentSlide / slidesPerView);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeDotIndex);
+            });
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex * slidesPerView;
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            const maxSlide = totalSlides - slidesPerView;
+            if (currentSlide >= maxSlide) {
+                currentSlide = 0; // Volta ao início
+            } else {
+                currentSlide += slidesPerView;
+            }
+            updateCarousel();
+        }
+
+        // Auto-play: trocar automaticamente a cada 4 segundos
+        setInterval(nextSlide, 4000);
+
+        // Inicializar carrossel
+        updateCarousel();
+
+        // Ajustar no resize
+        window.addEventListener('resize', () => {
+            updateCarousel();
+        });
+
+        // Carregar dados ao carregar a página
+        loadTreatments();
+    </script>
+</body>
+</html>

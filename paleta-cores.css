@@ -1,0 +1,138 @@
+/**
+ * 🎨 Paleta de Cores Premium - Clínica Odonto Azul
+ * 
+ * Paleta moderna, elegante e sofisticada para site odontológico de alto padrão
+ * Baseada em azul premium, cinza grafite e branco
+ */
+
+:root {
+  /* ============================================
+     AZUIS PRIMÁRIOS
+     ============================================ */
+  
+  /* Azul Premium Escuro - Uso: Headers, elementos de destaque */
+  --blue-dark: #0A4A6B;
+  
+  /* Azul Premium - Uso: Botões principais, CTAs, links */
+  --blue-primary: #0D5B82;
+  
+  /* Azul Premium Claro - Uso: Hover states, elementos interativos */
+  --blue-light: #0F6B99;
+  
+  /* Azul Gelo Médio - Uso: Bordas focus, separadores sutis */
+  --blue-ice-medium: #B8D9E3;
+  
+  /* Azul Gelo - Uso: Fundos de cards, containers */
+  --blue-ice: #D1E7ED;
+  
+  /* Azul Gelo Claro - Uso: Fundos de seções destacadas */
+  --blue-ice-light: #E8F4F8;
+
+
+  /* ============================================
+     CINZAS SECUNDÁRIOS
+     ============================================ */
+  
+  /* Cinza Grafite Escuro - Uso: Títulos principais */
+  --gray-dark: #2C3E50;
+  
+  /* Cinza Grafite - Uso: Textos de corpo, descrições */
+  --gray-primary: #34495E;
+  
+  /* Cinza Grafite Claro - Uso: Textos secundários */
+  --gray-light: #5D6D7E;
+  
+  /* Cinza Neutro - Uso: Placeholders, textos desabilitados */
+  --gray-neutral: #ADB5BD;
+  
+  /* Cinza Neutro Médio - Uso: Separadores, divisores */
+  --gray-neutral-medium: #DEE2E6;
+  
+  /* Cinza Neutro Claro - Uso: Bordas de cards, containers */
+  --gray-neutral-light: #E9ECEF;
+  
+  /* Cinza Neutro Muito Claro - Uso: Fundos de inputs, formulários */
+  --gray-neutral-very-light: #F5F7FA;
+
+
+  /* ============================================
+     BRANCOS (BASE)
+     ============================================ */
+  
+  /* Branco Puro - Uso: Fundo principal, cards */
+  --white: #FFFFFF;
+  
+  /* Branco Quente - Uso: Fundos alternados, seções */
+  --white-warm: #FAFBFC;
+
+
+  /* ============================================
+     CTAs E BOTÕES
+     ============================================ */
+  
+  /* Botão Principal */
+  --cta-primary: #0D5B82;
+  --cta-hover: #0F6B99;
+  --cta-active: #0A4A6B;
+  --cta-focus: #B8D9E3;
+
+
+  /* ============================================
+     TEXTOS
+     ============================================ */
+  
+  /* Textos Primários */
+  --text-primary: #2C3E50;        /* Títulos principais */
+  --text-body: #34495E;            /* Texto de corpo */
+  --text-secondary: #5D6D7E;      /* Textos secundários */
+  --text-placeholder: #ADB5BD;    /* Placeholders */
+  --text-disabled: #ADB5BD;       /* Textos desabilitados */
+  --text-on-dark: #FFFFFF;         /* Texto em fundo escuro */
+
+
+  /* ============================================
+     FUNDOS
+     ============================================ */
+  
+  --bg-primary: #FFFFFF;          /* Fundo principal */
+  --bg-alternate: #FAFBFC;        /* Fundo alternado */
+  --bg-section: #E8F4F8;          /* Fundo de seção */
+  --bg-card: #FFFFFF;             /* Fundo de card */
+  --bg-footer: #2C3E50;           /* Fundo do rodapé */
+  --bg-input: #F5F7FA;            /* Fundo de inputs */
+
+
+  /* ============================================
+     BORDAS E SEPARADORES
+     ============================================ */
+  
+  --border-card: #E9ECEF;          /* Bordas de cards */
+  --border-input: #DEE2E6;        /* Bordas de inputs */
+  --border-focus: #0D5B82;        /* Bordas em focus */
+  --border-separator: #E9ECEF;     /* Separadores */
+  --border-divider: #DEE2E6;       /* Divisores */
+
+
+  /* ============================================
+     SOMBRAS
+     ============================================ */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(10, 74, 107, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(10, 74, 107, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 74, 107, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(10, 74, 107, 0.1);
+
+
+  /* ============================================
+     GRADIENTES
+     ============================================ */
+  
+  --gradient-primary: linear-gradient(135deg, #0A4A6B 0%, #0D5B82 100%);
+  --gradient-hero: linear-gradient(135deg, #0A4A6B 0%, #0D5B82 100%);
+  --gradient-overlay: linear-gradient(135deg, rgba(10, 74, 107, 0.7) 0%, rgba(13, 91, 130, 0.7) 100%);
+}
+
+
+
+
+

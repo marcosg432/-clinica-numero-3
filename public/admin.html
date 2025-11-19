@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F5F7FA;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #0D5B82;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #5D6D7E;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #0D5B82;
+            border-bottom-color: #0D5B82;
+            font-weight: 600;
+        }
+
+        .tab:hover {
+            color: #0D5B82;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            color: #2C3E50;
+            font-size: 20px;
+        }
+
+        .btn-primary {
+            background: #0D5B82;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0F6B99;
+        }
+
+        .btn-danger {
+            background: #DC3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #C82333;
+        }
+
+        .btn-success {
+            background: #28A745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        table th {
+            background: #F5F7FA;
+            color: #2C3E50;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: #F5F7FA;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .status-approved {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #2C3E50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #5D6D7E;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #E9ECEF;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0D5B82;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #FEE;
+            color: #C33;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            background: #E9ECEF;
+            color: #5D6D7E;
+            border: 2px solid #E9ECEF;
+        }
+
+        .filter-btn:hover {
+            background: #DEE2E6;
+            border-color: #DEE2E6;
+        }
+
+        .filter-btn.active {
+            background: #0D5B82;
+            color: white;
+            border-color: #0D5B82;
+        }
+
+        .filter-btn.active:hover {
+            background: #0F6B99;
+            border-color: #0F6B99;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦷 Painel Administrativo</h1>
+        <div class="header-actions">
+            <span class="user-info" id="userInfo">Carregando...</span>
+            <button class="btn btn-secondary" onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('treatments')">Tratamentos</button>
+            <button class="tab" onclick="switchTab('appointments')">Agendamentos</button>
+            <button class="tab" onclick="switchTab('reviews')">Avaliações</button>
+        </div>
+
+        <!-- Tab: Tratamentos -->
+        <div id="treatments" class="tab-content active">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Gerenciar Tratamentos</h2>
+                    <button class="btn btn-primary" onclick="openTreatmentModal()">+ Novo Tratamento</button>
+                </div>
+                <div id="treatmentsList" class="loading">Carregando tratamentos...</div>
+            </div>
+        </div>
+
+        <!-- Tab: Agendamentos -->
+        <div id="appointments" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Agendamentos</h2>
+                </div>
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary filter-btn active" data-status="" onclick="filterAppointments('')" style="padding: 8px 16px;">Todos</button>
+                    <button class="btn btn-primary filter-btn" data-status="pending" onclick="filterAppointments('pending')" style="padding: 8px 16px;">Pendentes</button>
+                    <button class="btn btn-primary filter-btn" data-status="confirmed" onclick="filterAppointments('confirmed')" style="padding: 8px 16px;">Confirmados</button>
+                    <button class="btn btn-primary filter-btn" data-status="cancelled" onclick="filterAppointments('cancelled')" style="padding: 8px 16px;">Cancelados</button>
+                </div>
+                <div id="appointmentsList" class="loading">Carregando agendamentos...</div>
+            </div>
+        </div>
+
+        <!-- Tab: Avaliações -->
+        <div id="reviews" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Gerenciar Avaliações</h2>
+                    <button class="btn btn-primary" onclick="openReviewModal()">+ Nova Avaliação</button>
+                </div>
+                <div id="reviewsList" class="loading">Carregando avaliações...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Criar/Editar Avaliação -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reviewModalTitle">Nova Avaliação</h3>
+                <button class="close-btn" onclick="closeReviewModal()">&times;</button>
+            </div>
+            <form id="reviewForm">
+                <input type="hidden" id="reviewId">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="reviewName" required>
+                </div>
+                <div class="form-group">
+                    <label>Avaliação (1-5 estrelas)</label>
+                    <select id="reviewRating" required>
+                        <option value="">Selecione...</option>
+                        <option value="1">1 ⭐</option>
+                        <option value="2">2 ⭐⭐</option>
+                        <option value="3">3 ⭐⭐⭐</option>
+                        <option value="4">4 ⭐⭐⭐⭐</option>
+                        <option value="5">5 ⭐⭐⭐⭐⭐</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Comentário</label>
+                    <textarea id="reviewComment" rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Salvar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeReviewModal()" style="flex: 1;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Criar/Editar Tratamento -->
+    <div id="treatmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Tratamento</h3>
+                <button class="close-btn" onclick="closeTreatmentModal()">&times;</button>
+            </div>
+            <form id="treatmentForm">
+                <input type="hidden" id="treatmentId">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="treatmentTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Slug (URL amigável)</label>
+                    <input type="text" id="treatmentSlug" required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="treatmentDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Descrição Completa</label>
+                    <textarea id="treatmentFullDescription" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ativo</label>
+                    <select id="treatmentIsActive">
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Salvar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeTreatmentModal()" style="flex: 1;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API_BASE será definido por config.js ou usar padrão
+        const API_BASE = window.API_BASE || window.location.origin + '/api';
+        let currentTreatmentId = null;
+
+        // Verificar autenticação
+        function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/dashboard/admin-login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Carregar informações do usuário
+        function loadUserInfo() {
+            const user = JSON.parse(localStorage.getItem('adminUser') || '{}');
+            document.getElementById('userInfo').textContent = user.email || 'Admin';
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = '/dashboard/admin-login.html';
+        }
+
+        // Trocar aba
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            if (tabName === 'treatments') {
+                loadTreatments();
+            } else if (tabName === 'appointments') {
+                // Resetar filtro ao trocar de aba
+                currentAppointmentFilter = '';
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-status') === '') {
+                        btn.classList.add('active');
+                    }
+                });
+                loadAppointments();
+            } else if (tabName === 'reviews') {
+                loadReviews();
+            }
+        }
+
+        // Carregar tratamentos
+        async function loadTreatments() {
+            const token = localStorage.getItem('adminToken');
+            const listDiv = document.getElementById('treatmentsList');
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/treatments`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
+                    throw new Error(errorData.error || `Erro ${response.status}`);
+                }
+                
+                const treatments = await response.json();
+                
+                // Garantir que treatments é um array
+                if (!Array.isArray(treatments)) {
+                    throw new Error('Resposta inválida do servidor');
+                }
+                
+                if (treatments.length === 0) {
+                    listDiv.innerHTML = '<p>Nenhum tratamento cadastrado.</p>';
+                    return;
+                }
+                
+                listDiv.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Slug</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${treatments.map(t => `
+                                <tr>
+                                    <td>${t.title || '-'}</td>
+                                    <td>${t.slug || '-'}</td>
+                                    <td><span class="status-badge ${t.isActive ? 'status-confirmed' : 'status-cancelled'}">${t.isActive ? 'Ativo' : 'Inativo'}</span></td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="editTreatment('${t.id}')" style="padding: 5px 10px; font-size: 12px; margin-right: 5px;">Editar</button>
+                                        <button class="btn btn-danger" onclick="deleteTreatment('${t.id}')" style="padding: 5px 10px; font-size: 12px;">Excluir</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                listDiv.innerHTML = `<div class="error">Erro ao carregar tratamentos: ${error.message}</div>`;
+            }
+        }
+
+        // Variável para armazenar o filtro atual
+        let currentAppointmentFilter = '';
+
+        // Filtrar agendamentos
+        function filterAppointments(status) {
+            currentAppointmentFilter = status;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-status') === status) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Recarregar agendamentos com filtro
+            loadAppointments(status);
+        }
+
+        // Carregar agendamentos
+        async function loadAppointments(statusFilter = '') {
+            const token = localStorage.getItem('adminToken');
+            const listDiv = document.getElementById('appointmentsList');
+            
+            // Se não foi passado filtro, usar o filtro atual
+            if (!statusFilter && currentAppointmentFilter) {
+                statusFilter = currentAppointmentFilter;
+            }
+            
+            try {
+                // Construir URL com filtro se houver
+                let url = `${API_BASE}/admin/appointments`;
+                if (statusFilter) {
+                    url += `?status=${statusFilter}`;
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
+                    throw new Error(errorData.error || `Erro ${response.status}`);
+                }
+                
+                const appointments = await response.json();
+                
+                // Garantir que appointments é um array
+                if (!Array.isArray(appointments)) {
+                    throw new Error('Resposta inválida do servidor');
+                }
+                
+                if (appointments.length === 0) {
+                    const statusText = statusFilter === 'pending' ? 'pendentes' : 
+                                     statusFilter === 'confirmed' ? 'confirmados' : 
+                                     statusFilter === 'cancelled' ? 'cancelados' : '';
+                    listDiv.innerHTML = `<p>Nenhum agendamento ${statusText ? statusText : 'encontrado'}.</p>`;
+                    return;
+                }
+                
+                listDiv.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
+                                <th>Data Preferida</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${appointments.map(a => `
+                                <tr>
+                                    <td>${a.name || '-'}</td>
+                                    <td>${a.phone || '-'}</td>
+                                    <td>${a.email || '-'}</td>
+                                    <td>${a.datePreferred || '-'}</td>
+                                    <td><span class="status-badge status-${a.status || 'pending'}">${a.status === 'pending' ? 'Pendente' : a.status === 'confirmed' ? 'Confirmado' : a.status === 'cancelled' ? 'Cancelado' : 'Desconhecido'}</span></td>
+                                    <td>
+                                        ${a.status === 'pending' ? `
+                                            <button class="btn btn-success" onclick="confirmAppointment('${a.id}')" style="padding: 5px 10px; font-size: 12px; margin-right: 5px;">Confirmar</button>
+                                            <button class="btn btn-danger" onclick="cancelAppointment('${a.id}')" style="padding: 5px 10px; font-size: 12px;">Cancelar</button>
+                                        ` : '-'}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                listDiv.innerHTML = `<div class="error">Erro ao carregar agendamentos: ${error.message}</div>`;
+            }
+        }
+
+        // Variável para armazenar o ID da avaliação sendo editada
+        let currentReviewId = null;
+
+        // Modal de avaliação
+        function openReviewModal(id = null) {
+            currentReviewId = id;
+            const modal = document.getElementById('reviewModal');
+            const form = document.getElementById('reviewForm');
+            
+            if (id) {
+                document.getElementById('reviewModalTitle').textContent = 'Editar Avaliação';
+                loadReviewData(id);
+            } else {
+                document.getElementById('reviewModalTitle').textContent = 'Nova Avaliação';
+                form.reset();
+            }
+            
+            modal.classList.add('show');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('show');
+            currentReviewId = null;
+        }
+
+        async function loadReviewData(id) {
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/reviews/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const review = await response.json();
+                
+                document.getElementById('reviewId').value = review.id;
+                document.getElementById('reviewName').value = review.name || '';
+                document.getElementById('reviewRating').value = review.rating || '';
+                document.getElementById('reviewComment').value = review.comment || '';
+            } catch (error) {
+                alert('Erro ao carregar avaliação: ' + error.message);
+            }
+        }
+
+        // Carregar avaliações
+        async function loadReviews() {
+            const token = localStorage.getItem('adminToken');
+            const listDiv = document.getElementById('reviewsList');
+            
+            try {
+                // Buscar todas as avaliações (aprovadas e não aprovadas)
+                const response = await fetch(`${API_BASE}/admin/reviews?approved=false`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
+                    throw new Error(errorData.error || `Erro ${response.status}`);
+                }
+                
+                const reviews = await response.json();
+                
+                // Garantir que reviews é um array
+                if (!Array.isArray(reviews)) {
+                    throw new Error('Resposta inválida do servidor');
+                }
+                
+                if (reviews.length === 0) {
+                    listDiv.innerHTML = '<p>Nenhuma avaliação cadastrada.</p>';
+                    return;
+                }
+                
+                listDiv.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Avaliação</th>
+                                <th>Comentário</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${reviews.map(r => `
+                                <tr>
+                                    <td>${r.name || '-'}</td>
+                                    <td>${'⭐'.repeat(r.rating || 0)}</td>
+                                    <td>${r.comment || '-'}</td>
+                                    <td><span class="status-badge ${r.approved ? 'status-approved' : 'status-pending'}">${r.approved ? 'Aprovada' : 'Pendente'}</span></td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="editReview('${r.id}')" style="padding: 5px 10px; font-size: 12px; margin-right: 5px;">Editar</button>
+                                        <button class="btn btn-danger" onclick="deleteReview('${r.id}')" style="padding: 5px 10px; font-size: 12px;">Excluir</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                listDiv.innerHTML = `<div class="error">Erro ao carregar avaliações: ${error.message}</div>`;
+            }
+        }
+
+        // Modal de tratamento
+        function openTreatmentModal(id = null) {
+            currentTreatmentId = id;
+            const modal = document.getElementById('treatmentModal');
+            const form = document.getElementById('treatmentForm');
+            
+            if (id) {
+                document.getElementById('modalTitle').textContent = 'Editar Tratamento';
+                // Carregar dados do tratamento
+                loadTreatmentData(id);
+            } else {
+                document.getElementById('modalTitle').textContent = 'Novo Tratamento';
+                form.reset();
+            }
+            
+            modal.classList.add('show');
+        }
+
+        function closeTreatmentModal() {
+            document.getElementById('treatmentModal').classList.remove('show');
+            currentTreatmentId = null;
+        }
+
+        async function loadTreatmentData(id) {
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/treatments/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const treatment = await response.json();
+                
+                document.getElementById('treatmentId').value = treatment.id;
+                document.getElementById('treatmentTitle').value = treatment.title;
+                document.getElementById('treatmentSlug').value = treatment.slug;
+                document.getElementById('treatmentDescription').value = treatment.description;
+                document.getElementById('treatmentFullDescription').value = treatment.fullDescription || '';
+                document.getElementById('treatmentIsActive').value = treatment.isActive;
+            } catch (error) {
+                alert('Erro ao carregar tratamento: ' + error.message);
+            }
+        }
+
+        // Salvar tratamento
+        document.getElementById('treatmentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('adminToken');
+            
+            const data = {
+                title: document.getElementById('treatmentTitle').value,
+                slug: document.getElementById('treatmentSlug').value,
+                description: document.getElementById('treatmentDescription').value,
+                fullDescription: document.getElementById('treatmentFullDescription').value,
+                isActive: document.getElementById('treatmentIsActive').value === 'true'
+            };
+            
+            try {
+                const url = currentTreatmentId 
+                    ? `${API_BASE}/admin/treatments/${currentTreatmentId}`
+                    : `${API_BASE}/admin/treatments`;
+                
+                const method = currentTreatmentId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeTreatmentModal();
+                    loadTreatments();
+                } else {
+                    const error = await response.json();
+                    alert('Erro: ' + (error.error || 'Erro ao salvar tratamento'));
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        });
+
+        // Deletar tratamento
+        async function deleteTreatment(id) {
+            if (!confirm('Tem certeza que deseja excluir este tratamento?')) return;
+            
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/treatments/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    loadTreatments();
+                } else {
+                    alert('Erro ao excluir tratamento');
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        // Editar tratamento
+        function editTreatment(id) {
+            openTreatmentModal(id);
+        }
+
+        // Confirmar agendamento
+        async function confirmAppointment(id) {
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/appointments/${id}/confirm`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    loadAppointments(currentAppointmentFilter);
+                } else {
+                    alert('Erro ao confirmar agendamento');
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        // Cancelar agendamento
+        async function cancelAppointment(id) {
+            if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
+            
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/appointments/${id}/cancel`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    loadAppointments(currentAppointmentFilter);
+                } else {
+                    alert('Erro ao cancelar agendamento');
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        // Editar avaliação
+        function editReview(id) {
+            openReviewModal(id);
+        }
+
+        // Salvar avaliação
+        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('adminToken');
+            
+            const data = {
+                name: document.getElementById('reviewName').value,
+                rating: parseInt(document.getElementById('reviewRating').value),
+                comment: document.getElementById('reviewComment').value,
+                approved: true, // Sempre criar como aprovada no admin
+            };
+            
+            try {
+                const url = currentReviewId 
+                    ? `${API_BASE}/admin/reviews/${currentReviewId}`
+                    : `${API_BASE}/admin/reviews`;
+                
+                const method = currentReviewId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeReviewModal();
+                    loadReviews();
+                } else {
+                    const error = await response.json();
+                    alert('Erro: ' + (error.error || 'Erro ao salvar avaliação'));
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        });
+
+        // Deletar avaliação
+        async function deleteReview(id) {
+            if (!confirm('Tem certeza que deseja excluir esta avaliação?')) return;
+            
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch(`${API_BASE}/admin/reviews/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    loadReviews();
+                } else {
+                    alert('Erro ao excluir avaliação');
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        // Inicializar
+        if (checkAuth()) {
+            loadUserInfo();
+            loadTreatments();
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,88 @@
+// Schema para produção com PostgreSQL
+// Este arquivo será usado quando DATABASE_URL apontar para PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Treatment {
+  id             String   @id @default(uuid())
+  title          String
+  slug           String   @unique
+  description    String   @db.Text
+  fullDescription String?  @map("full_description") @db.Text
+  price          Float?
+  isActive       Boolean  @default(true) @map("is_active")
+  gallery       String[]  @default([])
+  benefits      String[]  @default([])
+  observations  String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  reviews      Review[]
+
+  @@map("treatments")
+}
+
+model Appointment {
+  id                String   @id @default(uuid())
+  name              String
+  phone             String
+  email             String
+  selectedTreatments String[] @map("selected_treatments")
+  datePreferred     DateTime? @map("date_preferred")
+  timePreferred     String?   @map("time_preferred")
+  status            String   @default("pending")
+  notes             String?  @db.Text
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("appointments")
+}
+
+model Review {
+  id          String     @id @default(uuid())
+  name        String
+  rating      Int
+  comment     String     @db.Text
+  approved    Boolean    @default(false)
+  treatmentId String?    @map("treatment_id")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  treatment Treatment? @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model ClinicInfo {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  phone       String
+  email       String
+  workingHours String?  @map("working_hours") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("clinic_info")
+}
+
