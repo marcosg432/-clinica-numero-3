@@ -16,6 +16,36 @@ if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL = 'file:./prisma/database.db';
 }
 
+// ⚠️ CRÍTICO: Garantir que o diretório prisma existe ANTES de importar Prisma
+// O SQLite precisa que o diretório exista para criar o arquivo database.db
+import * as fs from 'fs';
+import * as path from 'path';
+
+const dbPath = process.env.DATABASE_URL;
+if (dbPath && dbPath.startsWith('file:')) {
+  const dbFilePath = dbPath.replace('file:', '');
+  const dbDir = path.dirname(dbFilePath);
+  
+  try {
+    // Criar diretório se não existir
+    if (!fs.existsSync(dbDir)) {
+      console.log(`📁 Criando diretório do banco de dados: ${dbDir}`);
+      fs.mkdirSync(dbDir, { recursive: true });
+      console.log(`✅ Diretório criado com sucesso: ${dbDir}`);
+    }
+    
+    // Verificar se o diretório é acessível
+    if (!fs.existsSync(dbDir)) {
+      console.error(`❌ Não foi possível criar o diretório: ${dbDir}`);
+      console.error(`❌ Diretório atual de trabalho: ${process.cwd()}`);
+    }
+  } catch (error: any) {
+    console.error(`❌ Erro ao criar diretório do banco de dados: ${error.message}`);
+    console.error(`❌ Diretório tentado: ${dbDir}`);
+    console.error(`❌ Diretório atual: ${process.cwd()}`);
+  }
+}
+
 // LOG DEBUG IMEDIATO - ANTES DE QUALQUER IMPORTAÇÃO
 console.log('═══════════════════════════════════════════════════════');
 console.log('🚀 SERVIDOR INICIANDO - DEBUG DE VARIÁVEIS DE AMBIENTE');
