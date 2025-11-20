@@ -17,7 +17,7 @@ model User {
   email     String   @unique
   password  String
   role      String   @default("admin") // admin, super_admin
-  createdAt DateTime @default(now()) @map("created_at")AN==
+  createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
