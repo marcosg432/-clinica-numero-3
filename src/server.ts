@@ -239,6 +239,36 @@ async function checkAndSeedDatabase() {
   try {
     console.log('🔍 Verificando estado do banco de dados...');
     
+    // Executar migrations primeiro para garantir que o banco está criado
+    try {
+      console.log('🔄 Executando migrations do Prisma...');
+      const { execSync } = require('child_process');
+      execSync('npx prisma migrate deploy', {
+        stdio: 'inherit',
+        env: { ...process.env },
+        cwd: process.cwd(),
+        shell: true
+      });
+      console.log('✅ Migrations executadas com sucesso!');
+    } catch (migrationError: any) {
+      console.warn('⚠️ Erro ao executar migrations (pode ser que o banco já exista):', migrationError.message);
+      // Tentar criar o banco manualmente se as migrations falharem
+      try {
+        console.log('🔄 Tentando criar o banco de dados manualmente...');
+        const { execSync } = require('child_process');
+        execSync('npx prisma db push --accept-data-loss', {
+          stdio: 'inherit',
+          env: { ...process.env },
+          cwd: process.cwd(),
+          shell: true
+        });
+        console.log('✅ Banco de dados criado com sucesso!');
+      } catch (pushError: any) {
+        console.warn('⚠️ Erro ao criar banco manualmente:', pushError.message);
+        console.log('💡 Continuando - o banco pode já existir');
+      }
+    }
+    
     // Verificar se consegue conectar ao banco
     await prisma.$connect();
     console.log('✅ Conexão com banco de dados estabelecida');
