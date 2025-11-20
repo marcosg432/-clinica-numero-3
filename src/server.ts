@@ -52,7 +52,7 @@ app.use(helmet({
 
 // Configurar CORS para aceitar URLs do Vercel e da lista configurada
 const corsOptions = {
-  origin: (origin, callback) => {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     // Permitir requisições sem origem (mobile apps, curl, etc.)
     if (!origin) {
       callback(null, true);
