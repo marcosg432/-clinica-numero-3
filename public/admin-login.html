@@ -111,6 +111,7 @@
     </style>
     <!-- Carregar config.js ANTES de qualquer script -->
     <script src="/config.js"></script>
+    <script src="/public/config.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -122,12 +123,12 @@
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="admin@clinica.com">
+                <input type="email" id="email" name="email" required placeholder="admin@clinica.com" value="admin@clinica.com">
             </div>
             
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" name="password" required placeholder="••••••••">
+                <input type="password" id="password" name="password" required placeholder="••••••••" value="admin123">
             </div>
             
             <button type="submit" class="btn-login" id="loginBtn">Entrar</button>
@@ -136,7 +137,11 @@
 
     <script>
         // API_BASE será definido por config.js ou usar padrão
-        const API_BASE = window.API_BASE || window.location.origin + '/api';
+        const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+        
+        console.log('🔗 API_BASE:', API_BASE);
+        console.log('🌐 window.API_BASE:', window.API_BASE);
+        console.log('📍 window.location.origin:', window.location.origin);
         
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -151,8 +156,11 @@
             loginBtn.disabled = true;
             loginBtn.textContent = 'Entrando...';
             
+            const loginUrl = `${API_BASE}/admin/login`;
+            console.log('📡 Fazendo requisição para:', loginUrl);
+            
             try {
-                const response = await fetch(`${API_BASE}/admin/login`, {
+                const response = await fetch(loginUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -160,23 +168,45 @@
                     body: JSON.stringify({ email, password }),
                 });
                 
+                console.log('📥 Resposta recebida:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok,
+                });
+                
                 const data = await response.json();
+                console.log('📄 Dados recebidos:', data);
                 
                 if (response.ok) {
                     // Salvar token
                     localStorage.setItem('adminToken', data.token);
                     localStorage.setItem('adminUser', JSON.stringify(data.user));
                     
+                    console.log('✅ Login bem-sucedido! Redirecionando...');
+                    
                     // Redirecionar para dashboard
-                    window.location.href = '/dashboard/admin.html';
+                    const dashboardUrl = window.location.pathname.includes('/public/')
+                        ? '/public/admin.html'
+                        : '/dashboard/admin.html';
+                    window.location.href = dashboardUrl;
                 } else {
-                    errorMessage.textContent = data.error || 'Erro ao fazer login';
+                    const errorMsg = data.error || 'Erro ao fazer login';
+                    console.error('❌ Erro no login:', errorMsg);
+                    errorMessage.textContent = errorMsg;
                     errorMessage.classList.add('show');
                     loginBtn.disabled = false;
                     loginBtn.textContent = 'Entrar';
                 }
             } catch (error) {
-                errorMessage.textContent = 'Erro de conexão. Verifique se o servidor está rodando.';
+                console.error('❌ Erro de conexão:', error);
+                console.error('📋 Detalhes do erro:', {
+                    message: error.message,
+                    stack: error.stack,
+                    API_BASE: API_BASE,
+                    loginUrl: loginUrl,
+                });
+                
+                errorMessage.textContent = `Erro de conexão: ${error.message}. Verifique se o servidor está rodando.`;
                 errorMessage.classList.add('show');
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Entrar';
