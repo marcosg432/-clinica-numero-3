@@ -139,15 +139,17 @@ async function checkAndSeedDatabase() {
       const { execSync } = require('child_process');
       
       try {
-        execSync('npx prisma db seed', {
+        // Executar seed diretamente usando tsx (que está disponível no projeto)
+        execSync('npx tsx prisma/seed.ts', {
           stdio: 'inherit',
           env: { ...process.env },
-          cwd: process.cwd()
+          cwd: process.cwd(),
+          shell: true
         });
         console.log('✅ Banco de dados populado com sucesso!');
       } catch (seedError) {
         console.error('⚠️ Erro ao executar seed:', seedError);
-        console.log('💡 Você pode executar manualmente: npx prisma db seed');
+        console.log('💡 Você pode criar tratamentos via painel admin ou executar manualmente: npx tsx prisma/seed.ts');
       }
     } else {
       console.log(`✅ Banco de dados já possui ${treatmentCount} tratamento(s).`);
