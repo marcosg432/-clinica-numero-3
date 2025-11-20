@@ -1,38 +1,25 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "."
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*\\.(html|css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot))",
-      "dest": "/$1"
+      "source": "/sobre",
+      "destination": "/sobre.html"
     },
     {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/tratamentos",
+      "destination": "/tratamentos.html"
     },
     {
-      "src": "/sobre",
-      "dest": "/sobre.html"
+      "source": "/agendamento",
+      "destination": "/agendamento.html"
     },
     {
-      "src": "/tratamentos",
-      "dest": "/tratamentos.html"
+      "source": "/dashboard",
+      "destination": "/public/admin-login.html"
     },
     {
-      "src": "/agendamento",
-      "dest": "/agendamento.html"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/public/admin-login.html"
+      "source": "/",
+      "destination": "/index.html"
     }
   ],
   "headers": [
