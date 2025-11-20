@@ -314,8 +314,12 @@
             border-color: #0F6B99;
         }
     </style>
-    <!-- Carregar config.js ANTES de qualquer script -->
-    <script src="/config.js"></script>
+    <!-- Configuração da API embutida diretamente -->
+    <script>
+        // Configuração da API - Produção
+        window.API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+        console.log('✅ Configuração carregada. API_BASE:', window.API_BASE);
+    </script>
 </head>
 <body>
     <div class="header">
