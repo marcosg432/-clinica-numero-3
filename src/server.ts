@@ -49,10 +49,39 @@ app.get('/', (_req, res) => {
 app.use(helmet({
   contentSecurityPolicy: env.nodeEnv === 'production' ? undefined : false,
 }));
+
+// Configurar CORS para aceitar URLs do Vercel e da lista configurada
+const getCorsOrigin = () => {
+  // Permitir todas as origens em desenvolvimento
+  if (env.nodeEnv !== 'production') {
+    return true;
+  }
+
+  // Função para verificar origem permitida
+  return (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    // Permitir URLs do Vercel (*.vercel.app)
+    if (origin.endsWith('.vercel.app')) {
+      callback(null, true);
+      return;
+    }
+
+    // Verificar se está na lista configurada
+    if (env.cors.origin.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(null, false);
+  };
+};
+
 app.use(cors({
-  origin: env.nodeEnv === 'production' 
-    ? env.cors.origin 
-    : true, // Permitir todas as origens em desenvolvimento
+  origin: getCorsOrigin(),
   credentials: true,
 }));
 
