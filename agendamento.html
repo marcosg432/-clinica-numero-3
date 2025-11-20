@@ -165,11 +165,12 @@
         }
 
         /* Mostrar botão hambúrguer e esconder nav em telas médias e menores */
-        @media (max-width: 1024px) {
+        @media screen and (max-width: 1200px) {
             .menu-toggle {
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+                flex-direction: column !important;
             }
 
             .nav-links {
@@ -188,11 +189,11 @@
         }
 
         .menu-toggle span {
-            display: block;
+            display: block !important;
             width: 25px;
             height: 3px;
-            background: var(--primary-blue);
-            margin: 5px auto;
+            background: var(--primary-blue) !important;
+            margin: 3px 0;
             transition: all 0.3s ease;
             border-radius: 2px;
             position: relative;

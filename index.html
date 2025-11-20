@@ -112,6 +112,13 @@
             position: relative;
         }
 
+        /* Garantir que o menu toggle fique visível em telas menores */
+        @media screen and (max-width: 1024px) {
+            .header-content {
+                flex-wrap: nowrap;
+            }
+        }
+
         .logo {
             font-family: 'Poppins', sans-serif;
             font-size: 1.5rem;
@@ -160,21 +167,23 @@
             font-size: 1.5rem;
             z-index: 101;
             position: relative;
-            width: 35px;
-            height: 35px;
-            min-width: 35px;
-            min-height: 35px;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
             flex-shrink: 0;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
 
         /* Mostrar botão hambúrguer e esconder nav em telas médias e menores */
-        @media (max-width: 1024px) {
+        @media screen and (max-width: 1200px) {
             .menu-toggle {
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+                flex-direction: column !important;
             }
 
             .nav-links {
@@ -186,6 +195,16 @@
             }
         }
 
+        /* Garantir que apareça em qualquer tela menor */
+        @media screen and (max-width: 1024px) {
+            .menu-toggle {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                flex-direction: column !important;
+            }
+        }
+
         .menu-toggle:focus {
             outline: 2px solid var(--cta-focus);
             outline-offset: 2px;
@@ -193,11 +212,11 @@
         }
 
         .menu-toggle span {
-            display: block;
+            display: block !important;
             width: 25px;
             height: 3px;
-            background: var(--primary-blue);
-            margin: 5px auto;
+            background: var(--primary-blue) !important;
+            margin: 3px 0;
             transition: all 0.3s ease;
             border-radius: 2px;
             position: relative;
@@ -658,29 +677,34 @@
             /* Menu mobile - melhorar acessibilidade */
             .header-content {
                 position: relative;
+                flex-wrap: nowrap;
             }
 
             .menu-toggle {
                 display: flex !important;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+                width: 40px !important;
+                height: 40px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
             }
 
             .menu-toggle span {
                 display: block !important;
-                width: 25px;
-                height: 3px;
-                background-color: var(--primary-blue);
-                margin: 3px 0;
+                width: 25px !important;
+                height: 3px !important;
+                background-color: var(--primary-blue) !important;
+                margin: 3px 0 !important;
                 transition: all 0.3s ease;
                 border-radius: 2px;
             }
 
             .nav-links {
-                display: none;
+                display: none !important;
                 position: absolute;
                 top: 100%;
                 left: 0;
@@ -692,10 +716,11 @@
                 box-shadow: var(--shadow-lg);
                 border-top: 1px solid var(--border-card);
                 margin-top: 1rem;
+                z-index: 1000;
             }
 
             .nav-links.active {
-                display: flex;
+                display: flex !important;
             }
 
             .nav-links li {
