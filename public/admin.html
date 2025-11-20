@@ -468,8 +468,12 @@
     </div>
 
     <script>
-        // API_BASE será definido por config.js ou usar padrão
-        const API_BASE = window.API_BASE || window.location.origin + '/api';
+        // API_BASE será definido por config.js ou usar padrão (URL do Railway)
+        const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+        
+        // Log para debug
+        console.log('🔧 API_BASE configurado:', API_BASE);
+        console.log('🔧 window.API_BASE:', window.API_BASE);
         let currentTreatmentId = null;
 
         // Verificar autenticação
