@@ -43,7 +43,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Instalar apenas dependências de produção e limpar cache
-RUN npm ci --only=production --no-audit --no-fund && \
+RUN npm ci --omit=dev --no-audit --no-fund && \
     npm cache clean --force
 
 # Gerar Prisma Client no ambiente de produção
