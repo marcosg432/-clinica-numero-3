@@ -25,6 +25,9 @@ process.on('unhandledRejection', (reason: unknown) => {
 
 const app = express();
 
+// Configurar trust proxy para funcionar corretamente no Railway
+app.set('trust proxy', true);
+
 // Health check - PRIMEIRO, antes de qualquer middleware
 // Deve ser acessível mesmo se outros middlewares falharem
 // SEM dependências de qualquer tipo
@@ -217,9 +220,11 @@ const HOST = process.env.HOST || '0.0.0.0';
 const server = app.listen(PORT, HOST, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`🌐 Host: ${HOST}`);
-  console.log(`🔑 JWT_SECRET configurado: ${env.jwtSecret ? 'SIM' : 'NÃO'}`);
-  console.log(`🔑 JWT_SECRET length: ${env.jwtSecret?.length || 0}`);
-  console.log(`🔑 JWT_SECRET é default: ${env.jwtSecret === 'change-me-in-production' ? 'SIM' : 'NÃO'}`);
+  console.log(`🔑 process.env.JWT_SECRET: ${process.env.JWT_SECRET ? 'PRESENTE' : 'AUSENTE'}`);
+  console.log(`🔑 process.env.JWT_SECRET length: ${process.env.JWT_SECRET?.length || 0}`);
+  console.log(`🔑 env.jwtSecret configurado: ${env.jwtSecret ? 'SIM' : 'NÃO'}`);
+  console.log(`🔑 env.jwtSecret length: ${env.jwtSecret?.length || 0}`);
+  console.log(`🔑 env.jwtSecret é default: ${env.jwtSecret === 'change-me-in-production' ? 'SIM' : 'NÃO'}`);
   console.log(`📚 Documentação Swagger: http://${HOST}:${PORT}/api-docs`);
   console.log(`🏥 Health check: http://${HOST}:${PORT}/health`);
   console.log(`✅ Servidor pronto para receber requisições`);
