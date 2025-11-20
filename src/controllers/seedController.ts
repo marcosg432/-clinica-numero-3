@@ -51,7 +51,6 @@ export const runSeedController = async (
           instagram: '@odontoazul',
           facebook: 'odontoazul',
           workingHours: 'Segunda a Sexta: 8h às 18h\nSábado: 8h às 12h',
-          name: 'Clínica Odonto Azul',
         },
       });
       console.log('✅ Informações da clínica criadas');
