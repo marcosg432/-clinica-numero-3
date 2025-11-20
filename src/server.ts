@@ -51,39 +51,46 @@ app.use(helmet({
 }));
 
 // Configurar CORS para aceitar URLs do Vercel e da lista configurada
-const getCorsOrigin = () => {
-  // Permitir todas as origens em desenvolvimento
-  if (env.nodeEnv !== 'production') {
-    return true;
-  }
-
-  // Função para verificar origem permitida
-  return (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Permitir requisições sem origem (mobile apps, curl, etc.)
     if (!origin) {
       callback(null, true);
       return;
     }
 
+    // Permitir todas as origens em desenvolvimento
+    if (env.nodeEnv !== 'production') {
+      callback(null, true);
+      return;
+    }
+
+    console.log('🌐 CORS - Origem recebida:', origin);
+
     // Permitir URLs do Vercel (*.vercel.app)
     if (origin.endsWith('.vercel.app')) {
+      console.log('✅ CORS - Permitido (Vercel):', origin);
       callback(null, true);
       return;
     }
 
     // Verificar se está na lista configurada
     if (env.cors.origin.includes(origin)) {
+      console.log('✅ CORS - Permitido (Lista):', origin);
       callback(null, true);
       return;
     }
 
+    console.log('❌ CORS - Bloqueado:', origin);
+    console.log('📋 CORS - Origens permitidas:', env.cors.origin);
     callback(null, false);
-  };
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors({
-  origin: getCorsOrigin(),
-  credentials: true,
-}));
+app.use(cors(corsOptions));
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
