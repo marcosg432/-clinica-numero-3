@@ -20,52 +20,78 @@ export interface AuthResponse {
 }
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  const { email, password } = credentials;
+  try {
+    console.log('🔐 Iniciando processo de login...');
+    const { email, password } = credentials;
+    console.log('📧 Email recebido:', email);
 
-  // Buscar usuário
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+    // Verificar JWT secret primeiro
+    if (!env.jwtSecret || env.jwtSecret === 'change-me-in-production') {
+      console.error('❌ JWT_SECRET não configurado');
+      throw new AppError('JWT secret não configurado', 500);
+    }
 
-  if (!user) {
-    throw new AppError('Email ou senha incorretos', 401);
-  }
+    // Buscar usuário
+    console.log('🔍 Buscando usuário no banco de dados...');
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  // Verificar senha
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!user) {
+      console.log('❌ Usuário não encontrado:', email);
+      throw new AppError('Email ou senha incorretos', 401);
+    }
 
-  if (!isPasswordValid) {
-    throw new AppError('Email ou senha incorretos', 401);
-  }
+    console.log('✅ Usuário encontrado:', user.email);
 
-  // Gerar token JWT
-  if (!env.jwtSecret || env.jwtSecret === 'change-me-in-production') {
-    throw new AppError('JWT secret não configurado', 500);
-  }
+    // Verificar senha
+    console.log('🔒 Verificando senha...');
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  const payload = {
-    id: user.id,
-    email: user.email,
-    role: user.role,
-  };
+    if (!isPasswordValid) {
+      console.log('❌ Senha incorreta para usuário:', email);
+      throw new AppError('Email ou senha incorretos', 401);
+    }
 
-  const token = jwt.sign(
-    payload,
-    env.jwtSecret,
-    {
-      expiresIn: env.jwtExpiresIn,
-    } as SignOptions
-  );
+    console.log('✅ Senha correta');
 
-  return {
-    token,
-    user: {
+    // Gerar token JWT
+    console.log('🎫 Gerando token JWT...');
+    const payload = {
       id: user.id,
-      name: user.name,
       email: user.email,
       role: user.role,
-    },
-  };
+    };
+
+    const token = jwt.sign(
+      payload,
+      env.jwtSecret,
+      {
+        expiresIn: env.jwtExpiresIn,
+      } as SignOptions
+    );
+
+    console.log('✅ Token gerado com sucesso');
+
+    return {
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    };
+  } catch (error) {
+    console.error('❌ Erro no login:', error);
+    // Se já é um AppError, re-lança
+    if (error instanceof AppError) {
+      throw error;
+    }
+    // Se é um erro do Prisma ou outro erro inesperado, lança como erro interno
+    console.error('❌ Erro inesperado no login:', error);
+    throw new AppError('Erro interno do servidor durante o login', 500);
+  }
 };
 
 
