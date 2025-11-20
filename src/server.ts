@@ -1,6 +1,20 @@
 // Nota: Inicialização do banco de dados será feita via script separado
 // ou manualmente via shell do Railway após o primeiro deploy
 
+// LOG DEBUG IMEDIATO - ANTES DE QUALQUER IMPORTAÇÃO
+console.log('═══════════════════════════════════════════════════════');
+console.log('🚀 SERVIDOR INICIANDO - DEBUG DE VARIÁVEIS DE AMBIENTE');
+console.log('═══════════════════════════════════════════════════════');
+console.log('📋 NODE_ENV:', process.env.NODE_ENV);
+console.log('📋 PORT:', process.env.PORT);
+console.log('📋 JWT_SECRET existe?', !!process.env.JWT_SECRET);
+console.log('📋 JWT_SECRET length:', process.env.JWT_SECRET?.length || 0);
+console.log('📋 JWT_SECRET valor:', process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 20) + '...' : 'UNDEFINED');
+console.log('📋 DATABASE_URL existe?', !!process.env.DATABASE_URL);
+console.log('📋 Total de variáveis de ambiente:', Object.keys(process.env).length);
+console.log('📋 TODAS as variáveis:', JSON.stringify(Object.keys(process.env).sort(), null, 2));
+console.log('═══════════════════════════════════════════════════════');
+
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
@@ -47,6 +61,21 @@ app.get('/', (_req, res) => {
     message: 'Clínica Odonto Azul API',
     health: '/health'
   });
+});
+
+// Endpoint de debug para verificar variáveis de ambiente (apenas em desenvolvimento)
+app.get('/debug/env', (_req, res) => {
+  const envVars = Object.keys(process.env).sort();
+  const envData: Record<string, any> = {
+    total: envVars.length,
+    hasJWT_SECRET: !!process.env.JWT_SECRET,
+    hasDATABASE_URL: !!process.env.DATABASE_URL,
+    JWT_SECRET_length: process.env.JWT_SECRET?.length || 0,
+    DATABASE_URL_length: process.env.DATABASE_URL?.length || 0,
+    JWT_SECRET_preview: process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 10) + '...' : 'UNDEFINED',
+    allVars: envVars,
+  };
+  res.json(envData);
 });
 
 // Middlewares de segurança
