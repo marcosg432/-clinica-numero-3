@@ -589,7 +589,9 @@
                     </table>
                 `;
             } catch (error) {
-                listDiv.innerHTML = `<div class="error">Erro ao carregar tratamentos: ${error.message}</div>`;
+                const errorMessage = error instanceof Error ? error.message : (error?.toString() || 'Erro desconhecido');
+                console.error('❌ Erro ao carregar tratamentos:', error);
+                listDiv.innerHTML = `<div class="error">Erro ao carregar tratamentos: ${errorMessage}</div>`;
             }
         }
 
@@ -701,7 +703,9 @@
                     </table>
                 `;
             } catch (error) {
-                listDiv.innerHTML = `<div class="error">Erro ao carregar agendamentos: ${error.message}</div>`;
+                const errorMessage = error instanceof Error ? error.message : (error?.toString() || 'Erro desconhecido');
+                console.error('❌ Erro ao carregar agendamentos:', error);
+                listDiv.innerHTML = `<div class="error">Erro ao carregar agendamentos: ${errorMessage}</div>`;
             }
         }
 
@@ -821,7 +825,9 @@
                     </table>
                 `;
             } catch (error) {
-                listDiv.innerHTML = `<div class="error">Erro ao carregar avaliações: ${error.message}</div>`;
+                const errorMessage = error instanceof Error ? error.message : (error?.toString() || 'Erro desconhecido');
+                console.error('❌ Erro ao carregar avaliações:', error);
+                listDiv.innerHTML = `<div class="error">Erro ao carregar avaliações: ${errorMessage}</div>`;
             }
         }
 
