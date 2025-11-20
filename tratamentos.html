@@ -646,33 +646,62 @@
         loadTreatments();
     </script>
     <script>
-        // Menu Mobile Toggle
+        // Menu Mobile Toggle - FORÇAR VISIBILIDADE DO BOTÃO
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
 
+            function checkScreenSize() {
+                const width = window.innerWidth || document.documentElement.clientWidth;
+                
+                if (menuToggle) {
+                    if (width <= 1200) {
+                        menuToggle.style.display = 'flex';
+                        menuToggle.style.visibility = 'visible';
+                        menuToggle.style.opacity = '1';
+                        
+                        if (navLinks && !navLinks.classList.contains('active')) {
+                            navLinks.style.display = 'none';
+                        }
+                    } else {
+                        menuToggle.style.display = 'none';
+                        if (navLinks) {
+                            navLinks.style.display = 'flex';
+                            navLinks.classList.remove('active');
+                        }
+                    }
+                }
+            }
+
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+
             if (menuToggle && navLinks) {
-                // Toggle menu quando clicar no botão hambúrguer
                 menuToggle.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevenir que o click fora seja acionado imediatamente
+                    e.stopPropagation();
                     const isActive = navLinks.classList.contains('active');
                     
                     navLinks.classList.toggle('active');
                     menuToggle.classList.toggle('active');
                     menuToggle.setAttribute('aria-expanded', !isActive);
+                    
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.style.display = 'flex';
+                    } else {
+                        navLinks.style.display = 'none';
+                    }
                 });
 
-                // Fechar menu quando clicar em um link
                 const links = navLinks.querySelectorAll('a');
                 links.forEach(link => {
                     link.addEventListener('click', () => {
                         navLinks.classList.remove('active');
                         menuToggle.classList.remove('active');
                         menuToggle.setAttribute('aria-expanded', 'false');
+                        navLinks.style.display = 'none';
                     });
                 });
 
-                // Fechar menu ao clicar fora
                 document.addEventListener('click', (e) => {
                     if (navLinks.classList.contains('active') && 
                         !menuToggle.contains(e.target) && 
@@ -680,10 +709,10 @@
                         navLinks.classList.remove('active');
                         menuToggle.classList.remove('active');
                         menuToggle.setAttribute('aria-expanded', 'false');
+                        navLinks.style.display = 'none';
                     }
                 });
 
-                // Prevenir que o menu se feche ao clicar dentro dele
                 navLinks.addEventListener('click', (e) => {
                     e.stopPropagation();
                 });
