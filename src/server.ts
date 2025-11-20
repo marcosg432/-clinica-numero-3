@@ -44,31 +44,81 @@ import { errorHandler } from './middleware/errorHandler';
 import { swaggerSpec } from './config/swagger';
 import swaggerUi from 'swagger-ui-express';
 
-// ⚠️ CRÍTICO: Criar diretório do banco ANTES de importar Prisma
-const dbPath = process.env.DATABASE_URL;
+// ⚠️ CRÍTICO: Criar diretório e arquivo do banco ANTES de importar Prisma
+let dbPath = process.env.DATABASE_URL;
 if (dbPath && dbPath.startsWith('file:')) {
-  const dbFilePath = dbPath.replace('file:', '');
+  let dbFilePath = dbPath.replace('file:', '');
+  
+  // Se o caminho é relativo, converter para absoluto
+  if (!path.isAbsolute(dbFilePath)) {
+    const cwd = process.cwd();
+    dbFilePath = path.resolve(cwd, dbFilePath);
+    // Atualizar DATABASE_URL com caminho absoluto
+    process.env.DATABASE_URL = `file:${dbFilePath}`;
+    dbPath = process.env.DATABASE_URL;
+  }
+  
   const dbDir = path.dirname(dbFilePath);
+  const dbFileName = path.basename(dbFilePath);
+  
+  console.log(`📂 Caminho do banco: ${dbFilePath}`);
+  console.log(`📂 Diretório do banco: ${dbDir}`);
+  console.log(`📂 Arquivo do banco: ${dbFileName}`);
+  console.log(`📂 Diretório atual: ${process.cwd()}`);
   
   try {
     // Criar diretório se não existir
     if (!fs.existsSync(dbDir)) {
       console.log(`📁 Criando diretório do banco de dados: ${dbDir}`);
-      fs.mkdirSync(dbDir, { recursive: true });
+      fs.mkdirSync(dbDir, { recursive: true, mode: 0o755 });
       console.log(`✅ Diretório criado com sucesso: ${dbDir}`);
+    } else {
+      console.log(`✅ Diretório já existe: ${dbDir}`);
     }
     
     // Verificar se o diretório é acessível
     if (!fs.existsSync(dbDir)) {
       console.error(`❌ Não foi possível criar o diretório: ${dbDir}`);
-      console.error(`❌ Diretório atual de trabalho: ${process.cwd()}`);
-    } else {
-      console.log(`✅ Diretório do banco de dados verificado: ${dbDir}`);
+      throw new Error(`Não foi possível criar o diretório: ${dbDir}`);
     }
+    
+    // Verificar permissões do diretório
+    try {
+      fs.accessSync(dbDir, fs.constants.R_OK | fs.constants.W_OK);
+      console.log(`✅ Permissões de leitura/escrita verificadas no diretório: ${dbDir}`);
+    } catch (permError: any) {
+      console.error(`❌ Sem permissões de leitura/escrita no diretório: ${dbDir}`);
+      console.error(`❌ Erro: ${permError.message}`);
+    }
+    
+    // Criar arquivo vazio se não existir (o Prisma vai populá-lo)
+    if (!fs.existsSync(dbFilePath)) {
+      console.log(`📄 Criando arquivo do banco de dados: ${dbFilePath}`);
+      // Criar arquivo vazio
+      fs.writeFileSync(dbFilePath, '', { flag: 'w' });
+      console.log(`✅ Arquivo do banco de dados criado: ${dbFilePath}`);
+    } else {
+      console.log(`✅ Arquivo do banco de dados já existe: ${dbFilePath}`);
+    }
+    
+    // Verificar se o arquivo é acessível
+    try {
+      fs.accessSync(dbFilePath, fs.constants.R_OK | fs.constants.W_OK);
+      console.log(`✅ Permissões de leitura/escrita verificadas no arquivo: ${dbFilePath}`);
+    } catch (filePermError: any) {
+      console.error(`❌ Sem permissões de leitura/escrita no arquivo: ${dbFilePath}`);
+      console.error(`❌ Erro: ${filePermError.message}`);
+    }
+    
+    console.log(`✅ DATABASE_URL final: ${process.env.DATABASE_URL}`);
   } catch (error: any) {
-    console.error(`❌ Erro ao criar diretório do banco de dados: ${error.message}`);
+    console.error(`❌ Erro ao preparar banco de dados: ${error.message}`);
+    console.error(`❌ Stack trace: ${error.stack}`);
     console.error(`❌ Diretório tentado: ${dbDir}`);
+    console.error(`❌ Arquivo tentado: ${dbFilePath}`);
     console.error(`❌ Diretório atual: ${process.cwd()}`);
+    // Não lançar erro para não bloquear o servidor, mas avisar
+    console.error(`⚠️ Continuando, mas o banco pode não funcionar corretamente.`);
   }
 }
 
