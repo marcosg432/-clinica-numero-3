@@ -783,9 +783,16 @@
     </style>
 </head>
 <body>
+    <!-- TESTE: Verificar se o body está carregando -->
+    <script>
+        console.log('🔴 TESTE: Body carregado!');
+        console.log('🔴 TESTE: document.body existe?', !!document.body);
+    </script>
+    
     <!-- SCRIPT DO MENU HAMBÚRGUER - SOLUÇÃO DEFINITIVA -->
     <script>
         console.log('🍔 ===== INICIANDO MENU HAMBÚRGUER =====');
+        console.log('🍔 TESTE: Script executando!');
         
         function setupMenu() {
             const menuToggle = document.getElementById('menuToggle');
@@ -856,14 +863,18 @@
         setTimeout(setupMenu, 200);
     </script>
     
+    <!-- TESTE: Botão de teste visível -->
+    <div style="position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; z-index: 999999; font-size: 12px;">TESTE</div>
+    
     <!-- Header -->
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo" aria-label="Clínica Odonto Azul - Página inicial">🦷 Clínica Odonto Azul</a>
-            <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" id="menuToggle" style="display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; position: relative !important; z-index: 9999 !important; background: transparent !important; border: 2px solid #0D5B82 !important; cursor: pointer !important; padding: 0.5rem !important; margin: 0 !important;">
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
+            <!-- BOTÃO HAMBÚRGUER - FORÇAR VISIBILIDADE -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" style="display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; position: relative !important; z-index: 99999 !important; background: #FF0000 !important; border: 3px solid #000000 !important; cursor: pointer !important; padding: 0.5rem !important; margin: 0 !important; box-sizing: border-box !important;">
+                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
+                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
+                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
             </button>
             <nav aria-label="Navegação principal">
                 <ul class="nav-links" id="navLinks">
