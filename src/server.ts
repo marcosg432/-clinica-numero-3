@@ -62,11 +62,34 @@ app.use(errorHandler);
 
 // Iniciar servidor
 const PORT = env.port;
+const HOST = process.env.HOST || '0.0.0.0';
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, HOST, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📚 Documentação Swagger: http://localhost:${PORT}/api-docs`);
-  console.log(`🏥 Health check: http://localhost:${PORT}/health`);
+  console.log(`📚 Documentação Swagger: http://${HOST}:${PORT}/api-docs`);
+  console.log(`🏥 Health check: http://${HOST}:${PORT}/health`);
+});
+
+// Tratamento de erros do servidor
+server.on('error', (error: NodeJS.ErrnoException) => {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof PORT === 'string' ? 'Pipe ' + PORT : 'Port ' + PORT;
+
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`${bind} requer privilégios elevados`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} já está em uso`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
 });
 
 export default app;
