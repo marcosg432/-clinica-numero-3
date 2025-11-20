@@ -19,32 +19,6 @@ if (!process.env.DATABASE_URL) {
 // ⚠️ CRÍTICO: Garantir que o diretório prisma existe ANTES de importar Prisma
 // O SQLite precisa que o diretório exista para criar o arquivo database.db
 import * as fs from 'fs';
-import * as path from 'path';
-
-const dbPath = process.env.DATABASE_URL;
-if (dbPath && dbPath.startsWith('file:')) {
-  const dbFilePath = dbPath.replace('file:', '');
-  const dbDir = path.dirname(dbFilePath);
-  
-  try {
-    // Criar diretório se não existir
-    if (!fs.existsSync(dbDir)) {
-      console.log(`📁 Criando diretório do banco de dados: ${dbDir}`);
-      fs.mkdirSync(dbDir, { recursive: true });
-      console.log(`✅ Diretório criado com sucesso: ${dbDir}`);
-    }
-    
-    // Verificar se o diretório é acessível
-    if (!fs.existsSync(dbDir)) {
-      console.error(`❌ Não foi possível criar o diretório: ${dbDir}`);
-      console.error(`❌ Diretório atual de trabalho: ${process.cwd()}`);
-    }
-  } catch (error: any) {
-    console.error(`❌ Erro ao criar diretório do banco de dados: ${error.message}`);
-    console.error(`❌ Diretório tentado: ${dbDir}`);
-    console.error(`❌ Diretório atual: ${process.cwd()}`);
-  }
-}
 
 // LOG DEBUG IMEDIATO - ANTES DE QUALQUER IMPORTAÇÃO
 console.log('═══════════════════════════════════════════════════════');
@@ -69,6 +43,36 @@ import { env } from './config/env';
 import { errorHandler } from './middleware/errorHandler';
 import { swaggerSpec } from './config/swagger';
 import swaggerUi from 'swagger-ui-express';
+
+// ⚠️ CRÍTICO: Criar diretório do banco ANTES de importar Prisma
+const dbPath = process.env.DATABASE_URL;
+if (dbPath && dbPath.startsWith('file:')) {
+  const dbFilePath = dbPath.replace('file:', '');
+  const dbDir = path.dirname(dbFilePath);
+  
+  try {
+    // Criar diretório se não existir
+    if (!fs.existsSync(dbDir)) {
+      console.log(`📁 Criando diretório do banco de dados: ${dbDir}`);
+      fs.mkdirSync(dbDir, { recursive: true });
+      console.log(`✅ Diretório criado com sucesso: ${dbDir}`);
+    }
+    
+    // Verificar se o diretório é acessível
+    if (!fs.existsSync(dbDir)) {
+      console.error(`❌ Não foi possível criar o diretório: ${dbDir}`);
+      console.error(`❌ Diretório atual de trabalho: ${process.cwd()}`);
+    } else {
+      console.log(`✅ Diretório do banco de dados verificado: ${dbDir}`);
+    }
+  } catch (error: any) {
+    console.error(`❌ Erro ao criar diretório do banco de dados: ${error.message}`);
+    console.error(`❌ Diretório tentado: ${dbDir}`);
+    console.error(`❌ Diretório atual: ${process.cwd()}`);
+  }
+}
+
+// Agora importar Prisma (depois de garantir que o diretório existe)
 import publicRoutes from './routes/publicRoutes';
 import adminRoutes from './routes/adminRoutes';
 import prisma from './config/database';
