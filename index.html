@@ -775,10 +775,11 @@
     </div>
   </footer>
 
-    <script src="config.js"></script>
+    <!-- Carregar config.js ANTES de qualquer script -->
+    <script src="/config.js"></script>
     <script>
         // API_BASE será definido por config.js ou usar padrão
-        const API_BASE = window.API_BASE || 'http://localhost:3000/api';
+        const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
 
         // Carregar tratamentos
         async function loadTreatments() {
