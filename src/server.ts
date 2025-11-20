@@ -103,23 +103,41 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Servir arquivos estáticos do frontend (CSS, JS, imagens)
 app.use(express.static(path.join(__dirname, '../')));
 
-// Servir página HTML de dashboard
-app.use('/dashboard', express.static(path.join(__dirname, '../public')));
+// Servir página HTML de dashboard - deve vir ANTES das rotas da API
+app.use('/dashboard', express.static(path.join(__dirname, '../public'), {
+  index: 'admin-login.html',
+  extensions: ['html']
+}));
 
 // Rota para redirecionar /dashboard para login
 app.get('/dashboard', (_req, res) => {
   res.redirect('/dashboard/admin-login.html');
 });
 
-// Documentação Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Rota específica para admin-login.html
+app.get('/dashboard/admin-login.html', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../public/admin-login.html'));
+});
 
-// Rotas
+// Rota específica para admin.html
+app.get('/dashboard/admin.html', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../public/admin.html'));
+});
+
+// Rotas da API - devem vir ANTES do handler 404
 app.use('/api', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
-// 404 handler
+// Documentação Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// 404 handler - deve ser o último middleware, ANTES do error handler
 app.use((_req, res) => {
+  // Se a requisição é para um arquivo HTML ou começa com /dashboard, tenta servir o arquivo
+  if (_req.path.startsWith('/dashboard') || _req.path.endsWith('.html')) {
+    res.status(404).send('Página não encontrada');
+    return;
+  }
   res.status(404).json({ error: 'Rota não encontrada' });
 });
 
