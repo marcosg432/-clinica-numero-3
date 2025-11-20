@@ -1051,6 +1051,15 @@
                     }
                 });
 
+                // Verificar o tipo de conteúdo da resposta
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    // Se não for JSON, ler como texto para ver o que foi retornado
+                    const textResponse = await response.text();
+                    console.error('❌ Resposta não é JSON:', textResponse.substring(0, 200));
+                    throw new Error(`Resposta inesperada do servidor (${response.status}): ${textResponse.substring(0, 100)}`);
+                }
+
                 const result = await response.json();
 
                 if (response.ok && result.success) {
