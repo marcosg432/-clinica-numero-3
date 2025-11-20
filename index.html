@@ -934,8 +934,116 @@
     </div>
   </footer>
 
-    <!-- Carregar config.js ANTES de qualquer script -->
-    <script src="/config.js"></script>
+    <!-- MENU HAMBÚRGUER - EXECUTAR PRIMEIRO, ANTES DE QUALQUER COISA -->
+    <script>
+        // Menu Mobile Toggle - EXECUTAR IMEDIATAMENTE, SEM ESPERAR DOMContentLoaded
+        (function() {
+            function initMenu() {
+                const menuToggle = document.getElementById('menuToggle');
+                const navLinks = document.getElementById('navLinks');
+
+                if (!menuToggle || !navLinks) {
+                    // Se elementos ainda não existem, tentar novamente
+                    setTimeout(initMenu, 100);
+                    return;
+                }
+
+                // Função para verificar tamanho da tela e mostrar/esconder menu
+                function checkScreenSize() {
+                    const width = window.innerWidth || document.documentElement.clientWidth;
+                    
+                    if (width <= 1200) {
+                        // Mostrar botão hambúrguer e esconder nav
+                        menuToggle.style.display = 'flex';
+                        menuToggle.style.visibility = 'visible';
+                        menuToggle.style.opacity = '1';
+                        menuToggle.style.flexDirection = 'column';
+                        
+                        if (!navLinks.classList.contains('active')) {
+                            navLinks.style.display = 'none';
+                        }
+                    } else {
+                        // Esconder botão hambúrguer e mostrar nav
+                        menuToggle.style.display = 'none';
+                        navLinks.style.display = 'flex';
+                        navLinks.classList.remove('active');
+                    }
+                }
+
+                // Verificar imediatamente
+                checkScreenSize();
+
+                // Verificar ao redimensionar
+                window.addEventListener('resize', checkScreenSize);
+
+                // Toggle menu quando clicar no botão hambúrguer
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isActive = navLinks.classList.contains('active');
+                    
+                    navLinks.classList.toggle('active');
+                    menuToggle.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', !isActive);
+                    
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.style.display = 'flex';
+                    } else {
+                        navLinks.style.display = 'none';
+                    }
+                });
+
+                // Fechar menu quando clicar em um link
+                const links = navLinks.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        navLinks.style.display = 'none';
+                    });
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', (e) => {
+                    if (navLinks.classList.contains('active') && 
+                        !menuToggle.contains(e.target) && 
+                        !navLinks.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        navLinks.style.display = 'none';
+                    }
+                });
+
+                // Prevenir que o menu se feche ao clicar dentro dele
+                navLinks.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            // Tentar inicializar imediatamente se DOM já estiver pronto
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMenu);
+            } else {
+                initMenu();
+            }
+        })();
+    </script>
+
+    <!-- Carregar config.js de forma não bloqueante -->
+    <script>
+        // Carregar config.js sem bloquear execução
+        (function() {
+            const script = document.createElement('script');
+            script.src = '/config.js';
+            script.async = true;
+            script.onerror = function() {
+                // Se config.js falhar, definir API_BASE padrão
+                window.API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
     <script>
         // API_BASE será definido por config.js ou usar padrão
         const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
@@ -1060,93 +1168,6 @@
 
         // Carregar dados ao carregar a página
         loadTreatments();
-    </script>
-    <script>
-        // Menu Mobile Toggle - FORÇAR VISIBILIDADE DO BOTÃO
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-
-            // Função para verificar tamanho da tela e mostrar/esconder menu
-            function checkScreenSize() {
-                const width = window.innerWidth || document.documentElement.clientWidth;
-                
-                if (menuToggle) {
-                    if (width <= 1200) {
-                        // Mostrar botão hambúrguer e esconder nav
-                        menuToggle.style.display = 'flex';
-                        menuToggle.style.visibility = 'visible';
-                        menuToggle.style.opacity = '1';
-                        
-                        if (navLinks) {
-                            if (!navLinks.classList.contains('active')) {
-                                navLinks.style.display = 'none';
-                            }
-                        }
-                    } else {
-                        // Esconder botão hambúrguer e mostrar nav
-                        menuToggle.style.display = 'none';
-                        if (navLinks) {
-                            navLinks.style.display = 'flex';
-                            navLinks.classList.remove('active');
-                        }
-                    }
-                }
-            }
-
-            // Verificar ao carregar
-            checkScreenSize();
-
-            // Verificar ao redimensionar
-            window.addEventListener('resize', checkScreenSize);
-
-            if (menuToggle && navLinks) {
-                // Toggle menu quando clicar no botão hambúrguer
-                menuToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isActive = navLinks.classList.contains('active');
-                    
-                    navLinks.classList.toggle('active');
-                    menuToggle.classList.toggle('active');
-                    menuToggle.setAttribute('aria-expanded', !isActive);
-                    
-                    // Forçar display
-                    if (navLinks.classList.contains('active')) {
-                        navLinks.style.display = 'flex';
-                    } else {
-                        navLinks.style.display = 'none';
-                    }
-                });
-
-                // Fechar menu quando clicar em um link
-                const links = navLinks.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('click', () => {
-                        navLinks.classList.remove('active');
-                        menuToggle.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        navLinks.style.display = 'none';
-                    });
-                });
-
-                // Fechar menu ao clicar fora
-                document.addEventListener('click', (e) => {
-                    if (navLinks.classList.contains('active') && 
-                        !menuToggle.contains(e.target) && 
-                        !navLinks.contains(e.target)) {
-                        navLinks.classList.remove('active');
-                        menuToggle.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        navLinks.style.display = 'none';
-                    }
-                });
-
-                // Prevenir que o menu se feche ao clicar dentro dele
-                navLinks.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-            }
-        });
     </script>
 </body>
 </html>
