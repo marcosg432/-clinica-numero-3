@@ -1,16 +1,19 @@
 [phases.setup]
-nixPkgs = ["nodejs-20_x", "openssl_1_1"]
+nixPkgs = ["nodejs-20_x", "openssl"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = [
+  "npm ci --no-audit --no-fund",
+  "npm cache clean --force"
+]
 
 [phases.build]
 cmds = [
-  "npm run railway:prepare",
-  "npm run build",
-  "npx prisma generate"
+  "npm run railway:prepare || true",
+  "npx prisma generate",
+  "npm run build"
 ]
 
 [start]
-cmd = "npm run start"
+cmd = "node dist/server.js"
 
