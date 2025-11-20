@@ -101,6 +101,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .logo {
@@ -150,6 +151,12 @@
             color: var(--primary-blue);
             font-size: 1.5rem;
             z-index: 101;
+            position: relative;
+            width: 35px;
+            height: 35px;
+            min-width: 35px;
+            min-height: 35px;
+            flex-shrink: 0;
         }
 
         .menu-toggle:focus {
@@ -163,9 +170,10 @@
             width: 25px;
             height: 3px;
             background: var(--primary-blue);
-            margin: 5px 0;
+            margin: 5px auto;
             transition: all 0.3s ease;
             border-radius: 2px;
+            position: relative;
         }
 
         .menu-toggle.active span:nth-child(1) {
@@ -389,7 +397,10 @@
             }
 
             .menu-toggle {
-                display: block;
+                display: flex !important;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
             }
 
             .nav-links {
