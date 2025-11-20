@@ -126,6 +126,8 @@
             display: flex;
             gap: 1.5rem;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -144,6 +146,46 @@
 
         .nav-links a:hover {
             color: var(--primary-blue);
+        }
+
+        /* Botão Menu Mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            z-index: 101;
+        }
+
+        .menu-toggle:focus {
+            outline: 2px solid var(--cta-focus);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary-blue);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
         }
 
         /* Banner Principal */
@@ -586,13 +628,52 @@
                 font-size: 1.1rem;
             }
 
-            .nav-links {
-                display: none;
-            }
-
             /* Menu mobile - melhorar acessibilidade */
             .header-content {
                 position: relative;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+                box-shadow: var(--shadow-lg);
+                border-top: 1px solid var(--border-card);
+                margin-top: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 1rem 1.5rem;
+                width: 100%;
+                border-bottom: 1px solid var(--border-card);
+            }
+
+            .nav-links a:hover {
+                background: var(--blue-ice-light);
+                color: var(--primary-blue);
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
             }
 
             .clinic-photos {
@@ -649,14 +730,19 @@
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo" aria-label="Clínica Odonto Azul - Página inicial">🦷 Clínica Odonto Azul</a>
+            <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <nav aria-label="Navegação principal">
-                <ul class="nav-links">
+                <ul class="nav-links" id="navLinks">
                     <li><a href="index.html" aria-current="page">Início</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
                     <li><a href="tratamentos.html">Tratamentos</a></li>
                     <li><a href="agendamento.html">Agende</a></li>
                 </ul>
-    </nav>
+            </nav>
         </div>
   </header>
 
@@ -901,6 +987,40 @@
 
         // Carregar dados ao carregar a página
         loadTreatments();
+    </script>
+    <script>
+        // Menu Mobile Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                const isActive = navLinks.classList.contains('active');
+                
+                navLinks.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+                menuToggle.setAttribute('aria-expanded', !isActive);
+                
+                // Fechar menu quando clicar em um link
+                const links = navLinks.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            });
+
+            // Fechar menu ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
     </script>
 </body>
 </html>
