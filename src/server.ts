@@ -11,6 +11,7 @@ import { swaggerSpec } from './config/swagger';
 import swaggerUi from 'swagger-ui-express';
 import publicRoutes from './routes/publicRoutes';
 import adminRoutes from './routes/adminRoutes';
+import prisma from './config/database';
 
 // Tratamento de erros não capturados
 process.on('uncaughtException', (error: Error) => {
@@ -124,6 +125,43 @@ app.use((_req, res) => {
 
 // Error handler (deve ser o último middleware)
 app.use(errorHandler);
+
+// Função para verificar e popular o banco se estiver vazio
+async function checkAndSeedDatabase() {
+  try {
+    // Verificar se há tratamentos no banco
+    const treatmentCount = await prisma.treatment.count();
+    
+    if (treatmentCount === 0) {
+      console.log('🌱 Banco de dados vazio detectado. Populando...');
+      
+      // Executar seed via execSync
+      const { execSync } = require('child_process');
+      
+      try {
+        execSync('npx prisma db seed', {
+          stdio: 'inherit',
+          env: { ...process.env },
+          cwd: process.cwd()
+        });
+        console.log('✅ Banco de dados populado com sucesso!');
+      } catch (seedError) {
+        console.error('⚠️ Erro ao executar seed:', seedError);
+        console.log('💡 Você pode executar manualmente: npx prisma db seed');
+      }
+    } else {
+      console.log(`✅ Banco de dados já possui ${treatmentCount} tratamento(s).`);
+    }
+  } catch (error) {
+    console.error('⚠️ Erro ao verificar banco de dados:', error);
+    console.log('💡 O servidor continuará iniciando normalmente.');
+  }
+}
+
+// Verificar e popular banco de dados em background (não bloqueia o servidor)
+checkAndSeedDatabase().catch(() => {
+  // Ignorar erros silenciosamente para não bloquear o servidor
+});
 
 // Iniciar servidor
 const PORT = env.port;
