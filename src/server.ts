@@ -239,43 +239,67 @@ async function checkAndSeedDatabase() {
   try {
     console.log('🔍 Verificando estado do banco de dados...');
     
-    // Executar migrations primeiro para garantir que o banco está criado
-    try {
-      console.log('🔄 Executando migrations do Prisma...');
-      const { execSync } = require('child_process');
-      execSync('npx prisma migrate deploy', {
-        stdio: 'inherit',
-        env: { ...process.env },
-        cwd: process.cwd(),
-        shell: true
-      });
-      console.log('✅ Migrations executadas com sucesso!');
-    } catch (migrationError: any) {
-      console.warn('⚠️ Erro ao executar migrations (pode ser que o banco já exista):', migrationError.message);
-      // Tentar criar o banco manualmente se as migrations falharem
-      try {
-        console.log('🔄 Tentando criar o banco de dados manualmente...');
-        const { execSync } = require('child_process');
-        execSync('npx prisma db push --accept-data-loss', {
-          stdio: 'inherit',
-          env: { ...process.env },
-          cwd: process.cwd(),
-          shell: true
-        });
-        console.log('✅ Banco de dados criado com sucesso!');
-      } catch (pushError: any) {
-        console.warn('⚠️ Erro ao criar banco manualmente:', pushError.message);
-        console.log('💡 Continuando - o banco pode já existir');
-      }
-    }
-    
-    // Verificar se consegue conectar ao banco
+    // Conectar ao banco primeiro
     await prisma.$connect();
     console.log('✅ Conexão com banco de dados estabelecida');
     
+    // Verificar se as tabelas existem tentando uma query simples
+    let tablesExist = false;
+    try {
+      await prisma.$queryRaw`SELECT name FROM sqlite_master WHERE type='table' AND name='users'`;
+      const result: any = await prisma.$queryRaw`SELECT COUNT(*) as count FROM sqlite_master WHERE type='table'`;
+      const tableCount = result[0]?.count || 0;
+      console.log(`📊 Tabelas encontradas no banco: ${tableCount}`);
+      if (tableCount > 0) {
+        tablesExist = true;
+      }
+    } catch (checkError: any) {
+      console.warn('⚠️ Erro ao verificar tabelas:', checkError.message);
+    }
+    
+    // Se as tabelas não existem, criar o schema
+    if (!tablesExist) {
+      console.log('🔄 Tabelas não encontradas. Criando schema do banco de dados...');
+      try {
+        const { execSync } = require('child_process');
+        // Usar db push para criar o schema diretamente (mais confiável que migrations)
+        execSync('npx prisma db push --accept-data-loss --skip-generate', {
+          stdio: 'inherit',
+          env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
+          cwd: process.cwd(),
+          shell: true
+        });
+        console.log('✅ Schema do banco de dados criado com sucesso!');
+      } catch (pushError: any) {
+        console.error('❌ Erro ao criar schema:', pushError.message);
+        console.error('❌ Tentando método alternativo (migrate deploy)...');
+        try {
+          const { execSync } = require('child_process');
+          execSync('npx prisma migrate deploy', {
+            stdio: 'inherit',
+            env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
+            cwd: process.cwd(),
+            shell: true
+          });
+          console.log('✅ Migrations executadas com sucesso!');
+        } catch (migrationError: any) {
+          console.error('❌ Erro ao executar migrations:', migrationError.message);
+          throw new Error('Não foi possível criar as tabelas no banco de dados');
+        }
+      }
+    } else {
+      console.log('✅ Tabelas já existem no banco de dados');
+    }
+    
     // Verificar se há usuários no banco
-    const userCount = await prisma.user.count();
-    console.log(`👤 Usuários no banco: ${userCount}`);
+    let userCount = 0;
+    try {
+      userCount = await prisma.user.count();
+      console.log(`👤 Usuários no banco: ${userCount}`);
+    } catch (countError: any) {
+      console.error('❌ Erro ao contar usuários:', countError.message);
+      console.error('❌ As tabelas podem não ter sido criadas corretamente');
+    }
     
     // Verificar se há tratamentos no banco
     const treatmentCount = await prisma.treatment.count();
