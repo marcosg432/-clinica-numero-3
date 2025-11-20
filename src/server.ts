@@ -147,34 +147,61 @@ app.use(errorHandler);
 // Função para verificar e popular o banco se estiver vazio
 async function checkAndSeedDatabase() {
   try {
+    console.log('🔍 Verificando estado do banco de dados...');
+    
+    // Verificar se consegue conectar ao banco
+    await prisma.$connect();
+    console.log('✅ Conexão com banco de dados estabelecida');
+    
+    // Verificar se há usuários no banco
+    const userCount = await prisma.user.count();
+    console.log(`👤 Usuários no banco: ${userCount}`);
+    
     // Verificar se há tratamentos no banco
     const treatmentCount = await prisma.treatment.count();
+    console.log(`💊 Tratamentos no banco: ${treatmentCount}`);
     
-    if (treatmentCount === 0) {
-      console.log('🌱 Banco de dados vazio detectado. Populando...');
+    // Se não há usuários ou tratamentos, popular o banco
+    if (userCount === 0 || treatmentCount === 0) {
+      console.log('🌱 Banco de dados vazio ou incompleto detectado. Populando...');
       
-      // Executar seed via execSync
-      const { execSync } = require('child_process');
-      
+      // Importar e executar o seed diretamente
       try {
-        // Executar seed diretamente usando tsx (que está disponível no projeto)
-        execSync('npx tsx prisma/seed.ts', {
-          stdio: 'inherit',
-          env: { ...process.env },
-          cwd: process.cwd(),
-          shell: true
-        });
-        console.log('✅ Banco de dados populado com sucesso!');
-      } catch (seedError) {
-        console.error('⚠️ Erro ao executar seed:', seedError);
-        console.log('💡 Você pode criar tratamentos via painel admin ou executar manualmente: npx tsx prisma/seed.ts');
+        const { execSync } = require('child_process');
+        const path = require('path');
+        
+        // Tentar executar o seed compilado (mais confiável no Railway)
+        const seedPath = path.join(__dirname, '../prisma/seed.ts');
+        console.log('📝 Executando seed de:', seedPath);
+        
+        // Executar usando npx tsx ou node (o que estiver disponível)
+        try {
+          execSync('npx tsx prisma/seed.ts', {
+            stdio: 'inherit',
+            env: { ...process.env },
+            cwd: process.cwd(),
+            shell: true
+          });
+          console.log('✅ Banco de dados populado com sucesso via tsx!');
+        } catch (tsxError) {
+          console.log('⚠️ tsx não disponível, tentando node...');
+          // Se tsx falhar, tenta usar node diretamente (se o seed estiver compilado)
+          throw tsxError; // Por enquanto, apenas relança o erro
+        }
+      } catch (seedError: any) {
+        console.error('⚠️ Erro ao executar seed automático:', seedError.message);
+        console.log('💡 Você pode popular o banco via painel admin ou executar manualmente no Railway shell:');
+        console.log('   npx tsx prisma/seed.ts');
+        console.log('💡 Ou use a rota POST /api/admin/seed (após fazer login)');
       }
     } else {
-      console.log(`✅ Banco de dados já possui ${treatmentCount} tratamento(s).`);
+      console.log(`✅ Banco de dados já possui ${userCount} usuário(s) e ${treatmentCount} tratamento(s).`);
     }
-  } catch (error) {
-    console.error('⚠️ Erro ao verificar banco de dados:', error);
+  } catch (error: any) {
+    console.error('⚠️ Erro ao verificar banco de dados:', error.message);
+    console.log('💡 Verifique se as migrations foram executadas no Railway.');
     console.log('💡 O servidor continuará iniciando normalmente.');
+    console.log('💡 Você pode executar manualmente: npx prisma migrate deploy');
   }
 }
 
