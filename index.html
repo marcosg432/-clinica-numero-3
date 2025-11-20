@@ -156,19 +156,18 @@
             color: var(--primary-blue);
         }
 
-        /* Botão Menu Mobile - FORÇAR VISIBILIDADE SEMPRE EM MOBILE */
+        /* Botão Menu Mobile - SOLUÇÃO SIMPLES: SEMPRE VISÍVEL POR PADRÃO */
         .menu-toggle {
-            /* NUNCA esconder por padrão - sempre mostrar */
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
             background: transparent !important;
-            border: none !important;
+            border: 2px solid #0D5B82 !important;
             cursor: pointer !important;
             padding: 0.5rem !important;
             color: var(--primary-blue) !important;
             font-size: 1.5rem !important;
-            z-index: 9999 !important;
+            z-index: 99999 !important;
             position: relative !important;
             width: 40px !important;
             height: 40px !important;
@@ -181,44 +180,10 @@
             margin: 0 !important;
             top: 0 !important;
             right: 0 !important;
+            box-sizing: border-box !important;
         }
 
-        /* Esconder botão hambúrguer APENAS em telas grandes (acima de 1200px) */
-        @media screen and (min-width: 1201px) {
-            .menu-toggle {
-                display: none !important;
-            }
-
-            .nav-links {
-                display: flex !important;
-            }
-        }
-
-        /* GARANTIR que aparece em mobile */
-        @media screen and (max-width: 1200px) {
-            .menu-toggle {
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                flex-direction: column !important;
-                position: relative !important;
-                z-index: 9999 !important;
-            }
-
-            .nav-links {
-                display: none !important;
-            }
-
-            .nav-links.active {
-                display: flex !important;
-                position: absolute !important;
-                top: 100% !important;
-                left: 0 !important;
-                right: 0 !important;
-                background: #FFFFFF !important;
-                box-shadow: 0 10px 15px -3px rgba(10, 74, 107, 0.1) !important;
-            }
-        }
+        /* JavaScript vai esconder em telas grandes via inline style */
 
         .menu-toggle:focus {
             outline: 2px solid var(--cta-focus);
@@ -818,90 +783,77 @@
     </style>
 </head>
 <body>
-    <!-- SCRIPT DO MENU HAMBÚRGUER - EXECUTAR IMEDIATAMENTE -->
+    <!-- SCRIPT DO MENU HAMBÚRGUER - SOLUÇÃO DEFINITIVA -->
     <script>
-        (function() {
-            console.log('🍔 ===== MENU HAMBÚRGUER SCRIPT INICIADO =====');
+        console.log('🍔 ===== INICIANDO MENU HAMBÚRGUER =====');
+        
+        function setupMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
             
-            function initMenu() {
-                console.log('🍔 Iniciando initMenu()...');
-                const menuToggle = document.getElementById('menuToggle');
-                const navLinks = document.getElementById('navLinks');
-                
-                console.log('🍔 menuToggle:', menuToggle);
-                console.log('🍔 navLinks:', navLinks);
-                
-                if (!menuToggle) {
-                    console.log('🍔 menuToggle NÃO encontrado, tentando novamente...');
-                    setTimeout(initMenu, 100);
-                    return;
+            if (!menuToggle) {
+                console.log('🍔 menuToggle NÃO encontrado, tentando em 100ms...');
+                setTimeout(setupMenu, 100);
+                return;
+            }
+            
+            console.log('🍔 ✅ menuToggle ENCONTRADO!', menuToggle);
+            
+            const width = window.innerWidth || document.documentElement.clientWidth;
+            console.log('🍔 Largura da tela:', width);
+            
+            // FORÇAR visibilidade SEMPRE primeiro
+            menuToggle.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; position: relative !important; z-index: 99999 !important; background: transparent !important; border: 2px solid #0D5B82 !important; cursor: pointer !important; padding: 0.5rem !important;';
+            
+            // FORÇAR spans visíveis
+            const spans = menuToggle.querySelectorAll('span');
+            console.log('🍔 Encontrados', spans.length, 'spans');
+            spans.forEach(function(span, index) {
+                span.style.cssText = 'display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important;';
+                console.log('🍔 Span', index, 'configurado');
+            });
+            
+            // Esconder apenas se tela MUITO grande (>1200px)
+            if (width > 1200) {
+                console.log('🍔 Tela > 1200px - Escondendo botão');
+                menuToggle.style.display = 'none';
+                if (navLinks) navLinks.style.display = 'flex';
+            } else {
+                console.log('🍔 Tela <= 1200px - Mantendo botão VISÍVEL');
+                menuToggle.style.display = 'flex';
+                if (navLinks && !navLinks.classList.contains('active')) {
+                    navLinks.style.display = 'none';
                 }
-                
-                console.log('🍔 menuToggle ENCONTRADO!');
-                
-                const width = window.innerWidth || document.documentElement.clientWidth;
-                console.log('🍔 Largura da tela:', width);
-                
-                // SEMPRE mostrar em mobile, esconder apenas em telas MUITO grandes
-                if (width <= 1200) {
-                    console.log('🍔 Tela <= 1200px - FORÇANDO VISIBILIDADE');
-                    
-                    // FORÇAR estilos inline
-                    menuToggle.setAttribute('style', 'display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; position: relative !important; z-index: 1001 !important; background: transparent !important; border: none !important; cursor: pointer !important; padding: 0.5rem !important;');
-                    
-                    // FORÇAR spans visíveis
-                    const spans = menuToggle.querySelectorAll('span');
-                    console.log('🍔 Encontrados', spans.length, 'spans');
-                    spans.forEach(function(span, index) {
-                        span.setAttribute('style', 'display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important;');
-                        console.log('🍔 Span', index, 'configurado');
-                    });
-                    
-                    // Event listener
-                    menuToggle.onclick = function(e) {
-                        e.stopPropagation();
-                        console.log('🍔 Botão clicado!');
-                        if (navLinks) {
-                            const isActive = navLinks.classList.contains('active');
-                            navLinks.classList.toggle('active');
-                            
-                            if (navLinks.classList.contains('active')) {
-                                navLinks.style.display = 'flex';
-                                navLinks.style.position = 'absolute';
-                                navLinks.style.top = '100%';
-                                navLinks.style.left = '0';
-                                navLinks.style.right = '0';
-                                navLinks.style.background = '#FFFFFF';
-                                navLinks.style.boxShadow = '0 10px 15px -3px rgba(10, 74, 107, 0.1)';
-                            } else {
-                                navLinks.style.display = 'none';
-                            }
-                        }
-                    };
-                    
-                    if (navLinks && !navLinks.classList.contains('active')) {
+            }
+            
+            // Click handler
+            menuToggle.onclick = function(e) {
+                e.stopPropagation();
+                console.log('🍔 BOTÃO CLICADO!');
+                if (navLinks) {
+                    navLinks.classList.toggle('active');
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.style.cssText = 'display: flex !important; position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; background: #FFFFFF !important; box-shadow: 0 10px 15px -3px rgba(10, 74, 107, 0.1) !important; flex-direction: column !important; z-index: 9999 !important;';
+                    } else {
                         navLinks.style.display = 'none';
                     }
-                    
-                    console.log('🍔 ✅ MENU HAMBÚRGUER CONFIGURADO COM SUCESSO!');
-                } else {
-                    console.log('🍔 Tela > 1200px - Escondendo botão');
-                    menuToggle.style.display = 'none';
                 }
-            }
+            };
             
-            // Executar múltiplas vezes para garantir
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initMenu);
-            } else {
-                initMenu();
-            }
-            
-            window.addEventListener('load', initMenu);
-            setTimeout(initMenu, 200);
-            setTimeout(initMenu, 500);
-            setTimeout(initMenu, 1000);
-        })();
+            console.log('🍔 ✅✅✅ MENU HAMBÚRGUER CONFIGURADO COM SUCESSO! ✅✅✅');
+        }
+        
+        // Executar IMEDIATAMENTE
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupMenu);
+        } else {
+            setupMenu();
+        }
+        
+        window.addEventListener('load', setupMenu);
+        setTimeout(setupMenu, 50);
+        setTimeout(setupMenu, 100);
+        setTimeout(setupMenu, 200);
     </script>
     
     <!-- Header -->
