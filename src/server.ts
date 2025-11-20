@@ -217,6 +217,9 @@ const HOST = process.env.HOST || '0.0.0.0';
 const server = app.listen(PORT, HOST, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`🌐 Host: ${HOST}`);
+  console.log(`🔑 JWT_SECRET configurado: ${env.jwtSecret ? 'SIM' : 'NÃO'}`);
+  console.log(`🔑 JWT_SECRET length: ${env.jwtSecret?.length || 0}`);
+  console.log(`🔑 JWT_SECRET é default: ${env.jwtSecret === 'change-me-in-production' ? 'SIM' : 'NÃO'}`);
   console.log(`📚 Documentação Swagger: http://${HOST}:${PORT}/api-docs`);
   console.log(`🏥 Health check: http://${HOST}:${PORT}/health`);
   console.log(`✅ Servidor pronto para receber requisições`);

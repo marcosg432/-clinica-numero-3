@@ -22,12 +22,22 @@ export interface AuthResponse {
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
     console.log('🔐 Iniciando processo de login...');
+    console.log('🔑 JWT_SECRET verificação:', {
+      hasValue: !!env.jwtSecret,
+      length: env.jwtSecret?.length || 0,
+      isDefault: env.jwtSecret === 'change-me-in-production',
+      firstChars: env.jwtSecret?.substring(0, 8) || 'undefined'
+    });
     const { email, password } = credentials;
     console.log('📧 Email recebido:', email);
 
     // Verificar JWT secret primeiro
     if (!env.jwtSecret || env.jwtSecret === 'change-me-in-production') {
       console.error('❌ JWT_SECRET não configurado');
+      console.error('❌ Variáveis de ambiente:', {
+        JWT_SECRET: process.env.JWT_SECRET ? 'presente' : 'ausente',
+        JWT_SECRET_length: process.env.JWT_SECRET?.length || 0
+      });
       throw new AppError('JWT secret não configurado', 500);
     }
 
