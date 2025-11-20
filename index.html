@@ -806,6 +806,101 @@
     </style>
 </head>
 <body>
+    <!-- SCRIPT DO MENU HAMBÚRGUER - EXECUTAR PRIMEIRO -->
+    <script>
+        // Executar ANTES de qualquer coisa - forçar visibilidade do botão
+        console.log('🍔 Script do menu hambúrguer carregado!');
+        
+        // Função simples que força a visibilidade
+        function forceMenuVisibility() {
+            // Aguardar um pouco para garantir que o DOM esteja pronto
+            if (document.body) {
+                setTimeout(function() {
+                    const menuToggle = document.getElementById('menuToggle');
+                    const navLinks = document.getElementById('navLinks');
+                    
+                    console.log('🍔 Tentando encontrar elementos...');
+                    console.log('🍔 menuToggle:', menuToggle);
+                    console.log('🍔 navLinks:', navLinks);
+                    
+                    if (menuToggle) {
+                        console.log('🍔 menuToggle encontrado! Forçando visibilidade...');
+                        const width = window.innerWidth || document.documentElement.clientWidth;
+                        console.log('🍔 Largura da tela:', width);
+                        
+                        if (width <= 1200) {
+                            console.log('🍔 Tela <= 1200px - Mostrando botão');
+                            menuToggle.style.display = 'flex';
+                            menuToggle.style.visibility = 'visible';
+                            menuToggle.style.opacity = '1';
+                            menuToggle.style.position = 'relative';
+                            menuToggle.style.zIndex = '1001';
+                            menuToggle.style.width = '40px';
+                            menuToggle.style.height = '40px';
+                            menuToggle.style.minWidth = '40px';
+                            menuToggle.style.minHeight = '40px';
+                            menuToggle.style.flexDirection = 'column';
+                            menuToggle.style.alignItems = 'center';
+                            menuToggle.style.justifyContent = 'center';
+                            
+                            // Forçar spans visíveis
+                            const spans = menuToggle.querySelectorAll('span');
+                            spans.forEach(function(span, index) {
+                                span.style.display = 'block';
+                                span.style.width = '25px';
+                                span.style.height = '3px';
+                                span.style.backgroundColor = '#0D5B82';
+                                span.style.margin = '3px 0';
+                                span.style.borderRadius = '2px';
+                                console.log('🍔 Span', index, 'configurado');
+                            });
+                            
+                            if (navLinks && !navLinks.classList.contains('active')) {
+                                navLinks.style.display = 'none';
+                            }
+                            
+                            // Event listener para toggle
+                            menuToggle.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                if (navLinks) {
+                                    const isActive = navLinks.classList.contains('active');
+                                    navLinks.classList.toggle('active');
+                                    menuToggle.classList.toggle('active');
+                                    
+                                    if (navLinks.classList.contains('active')) {
+                                        navLinks.style.display = 'flex';
+                                    } else {
+                                        navLinks.style.display = 'none';
+                                    }
+                                }
+                            });
+                            
+                            console.log('🍔 Botão hambúrguer configurado com sucesso!');
+                        } else {
+                            console.log('🍔 Tela > 1200px - Escondendo botão');
+                            menuToggle.style.display = 'none';
+                        }
+                    } else {
+                        console.log('🍔 menuToggle NÃO encontrado ainda, tentando novamente...');
+                        setTimeout(forceMenuVisibility, 100);
+                    }
+                }, 50);
+            } else {
+                setTimeout(forceMenuVisibility, 50);
+            }
+        }
+        
+        // Executar quando possível
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', forceMenuVisibility);
+        } else {
+            forceMenuVisibility();
+        }
+        
+        // Também executar quando a janela carregar completamente
+        window.addEventListener('load', forceMenuVisibility);
+    </script>
+    
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -940,27 +1035,6 @@
             <p>&copy; 2024 Clínica Odonto Azul. Todos os direitos reservados.</p>
     </div>
   </footer>
-
-    <!-- MENU HAMBÚRGUER - EXECUTAR PRIMEIRO, ANTES DE QUALQUER COISA -->
-    <script>
-        // Menu Mobile Toggle - EXECUTAR IMEDIATAMENTE, SEM ESPERAR DOMContentLoaded
-        console.log('🍔 Iniciando script do menu hambúrguer...');
-        (function() {
-            function initMenu() {
-                console.log('🍔 initMenu() chamado');
-                const menuToggle = document.getElementById('menuToggle');
-                const navLinks = document.getElementById('navLinks');
-
-                console.log('🍔 menuToggle encontrado?', !!menuToggle);
-                console.log('🍔 navLinks encontrado?', !!navLinks);
-
-                if (!menuToggle || !navLinks) {
-                    console.log('🍔 Elementos não encontrados, tentando novamente...');
-                    setTimeout(initMenu, 100);
-                    return;
-                }
-
-                console.log('🍔 Elementos encontrados! Configurando menu...');
 
                 // Função para verificar tamanho da tela e mostrar/esconder menu
                 function checkScreenSize() {
