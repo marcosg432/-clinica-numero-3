@@ -780,14 +780,32 @@
     <script>
         // API_BASE será definido por config.js ou usar padrão
         const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+        
+        // Debug: Log da URL da API
+        console.log('🔗 API_BASE:', API_BASE);
 
         // Carregar tratamentos
         async function loadTreatments() {
+            const carousel = document.getElementById('treatmentsCarousel');
             try {
+                console.log('📡 Fazendo requisição para:', `${API_BASE}/home`);
                 const response = await fetch(`${API_BASE}/home`);
-                const data = await response.json();
                 
-                const carousel = document.getElementById('treatmentsCarousel');
+                console.log('📥 Resposta recebida:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erro na resposta:', errorText);
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Dados recebidos:', data);
+                
                 if (data.treatments && data.treatments.length > 0) {
                     carousel.innerHTML = data.treatments.map(treatment => `
                         <div class="treatment-card">
@@ -805,9 +823,9 @@
                     document.getElementById('footerPhone').textContent = data.clinicInfo.phone || '+55 67 99999-0000';
                 }
             } catch (error) {
-                // Erro silencioso - não expor detalhes técnicos ao usuário
-                document.getElementById('treatmentsCarousel').innerHTML = 
-                    '<div class="error">Erro ao carregar tratamentos. Por favor, tente novamente mais tarde.</div>';
+                console.error('❌ Erro ao carregar tratamentos:', error);
+                carousel.innerHTML = 
+                    '<div class="error">Erro ao carregar tratamentos. Verifique o console (F12) para mais detalhes.</div>';
             }
         }
 

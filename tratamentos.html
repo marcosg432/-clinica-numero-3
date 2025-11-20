@@ -421,14 +421,33 @@
     <script src="/config.js"></script>
     <script>
         const API_BASE = window.API_BASE || 'https://clinica-numero-3-production.up.railway.app/api';
+        
+        // Debug: Log da URL da API
+        console.log('🔗 API_BASE:', API_BASE);
 
         // Carregar tratamentos
         async function loadTreatments() {
+            const grid = document.getElementById('treatmentsGrid');
             try {
+                console.log('📡 Fazendo requisição para:', `${API_BASE}/treatments?active=true`);
                 const response = await fetch(`${API_BASE}/treatments?active=true`);
-                const treatments = await response.json();
                 
-                const grid = document.getElementById('treatmentsGrid');
+                console.log('📥 Resposta recebida:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok,
+                    headers: Object.fromEntries(response.headers.entries())
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erro na resposta:', errorText);
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+                
+                const treatments = await response.json();
+                console.log('✅ Tratamentos recebidos:', treatments);
+                
                 if (treatments && treatments.length > 0) {
                     grid.innerHTML = treatments.map(treatment => {
                         const benefits = treatment.benefits ? (Array.isArray(treatment.benefits) ? treatment.benefits : JSON.parse(treatment.benefits || '[]')) : [];
@@ -462,18 +481,24 @@
                 // Atualizar rodapé
                 try {
                     const homeResponse = await fetch(`${API_BASE}/home`);
-                    const homeData = await homeResponse.json();
-                    if (homeData.clinicInfo) {
-                        document.getElementById('footerAddress').textContent = homeData.clinicInfo.address || 'Av. Afonso Pena, 4909 – Campo Grande/MS';
-                        document.getElementById('footerPhone').textContent = homeData.clinicInfo.phone || '+55 67 99999-0000';
+                    if (homeResponse.ok) {
+                        const homeData = await homeResponse.json();
+                        if (homeData.clinicInfo) {
+                            document.getElementById('footerAddress').textContent = homeData.clinicInfo.address || 'Av. Afonso Pena, 4909 – Campo Grande/MS';
+                            document.getElementById('footerPhone').textContent = homeData.clinicInfo.phone || '+55 67 99999-0000';
+                        }
                     }
                 } catch (e) {
-                    // Erro silencioso ao carregar informações da clínica
+                    console.warn('⚠️ Erro ao carregar informações da clínica:', e);
                 }
             } catch (error) {
-                // Erro silencioso - não expor detalhes técnicos
-                document.getElementById('treatmentsGrid').innerHTML = 
-                    '<div class="error">Erro ao carregar tratamentos. Por favor, tente novamente mais tarde.</div>';
+                console.error('❌ Erro ao carregar tratamentos:', error);
+                grid.innerHTML = `
+                    <div class="error">
+                        <strong>Erro ao carregar tratamentos</strong><br>
+                        <small>Verifique o console do navegador (F12) para mais detalhes.</small>
+                    </div>
+                `;
             }
         }
 
