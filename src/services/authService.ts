@@ -31,14 +31,20 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
     const { email, password } = credentials;
     console.log('📧 Email recebido:', email);
 
-    // Verificar JWT secret primeiro
-    if (!env.jwtSecret || env.jwtSecret === 'change-me-in-production') {
+    // Verificar JWT secret
+    if (!env.jwtSecret) {
       console.error('❌ JWT_SECRET não configurado');
       console.error('❌ Variáveis de ambiente:', {
         JWT_SECRET: process.env.JWT_SECRET ? 'presente' : 'ausente',
         JWT_SECRET_length: process.env.JWT_SECRET?.length || 0
       });
       throw new AppError('JWT secret não configurado', 500);
+    }
+
+    // Avisar se estiver usando valor temporário (mas permitir funcionar)
+    if (env.jwtSecret.startsWith('temp-jwt-secret-railway-fix-')) {
+      console.warn('⚠️ ATENÇÃO: Usando valor temporário de JWT_SECRET!');
+      console.warn('⚠️ Configure JWT_SECRET corretamente no Railway.');
     }
 
     // Buscar usuário

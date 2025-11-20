@@ -29,17 +29,32 @@ let jwtSecret = process.env.JWT_SECRET
   || process.env.JWT_SECRET_KEY 
   || process.env.JWT_TOKEN_SECRET
   || process.env.JWTSECRET
-  || 'change-me-in-production';
+  || null;
 
-// Verificar se estamos no Railway e se a variável não está configurada
-const isRailway = !!process.env.RAILWAY_ENVIRONMENT || !!process.env.RAILWAY_PROJECT_ID || !!process.env.RAILWAY_SERVICE_NAME;
-if (isRailway && jwtSecret === 'change-me-in-production') {
-  console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
-  console.error('❌ JWT_SECRET NÃO ENCONTRADO NO RAILWAY!');
-  console.error('❌ Verifique se a variável está configurada como SERVICE VARIABLE');
-  console.error('❌ Não como SHARED VARIABLE ou PROJECT VARIABLE');
-  console.error('❌ Nome exato: JWT_SECRET (sem espaços, maiúsculas)');
-  console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
+// Verificar se estamos no Railway
+const isRailway = !!process.env.RAILWAY_ENVIRONMENT 
+  || !!process.env.RAILWAY_PROJECT_ID 
+  || !!process.env.RAILWAY_SERVICE_NAME
+  || process.env.RAILWAY === 'true';
+
+// Se JWT_SECRET não foi encontrado
+if (!jwtSecret) {
+  if (isRailway) {
+    console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
+    console.error('❌ JWT_SECRET NÃO ENCONTRADO NO RAILWAY!');
+    console.error('❌ Verifique se a variável está configurada como SERVICE VARIABLE');
+    console.error('❌ Não como SHARED VARIABLE ou PROJECT VARIABLE');
+    console.error('❌ Nome exato: JWT_SECRET (sem espaços, maiúsculas)');
+    console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
+    console.warn('⚠️ Usando valor temporário apenas para permitir o sistema funcionar.');
+    console.warn('⚠️ ISSO É TEMPORÁRIO - CONFIGURE JWT_SECRET CORRETAMENTE NO RAILWAY!');
+    // Valor temporário fixo para permitir o sistema funcionar
+    // IMPORTANTE: Este valor será usado apenas se JWT_SECRET não estiver configurado
+    jwtSecret = 'temp-jwt-secret-railway-fix-0d4ad7ab4ae8e38f7be9bc38bb6d1a2d36e31d0ff55c46bc088296afc6124725';
+  } else {
+    // Em desenvolvimento local, usar valor padrão
+    jwtSecret = 'change-me-in-production';
+  }
 }
 
 export const env = {

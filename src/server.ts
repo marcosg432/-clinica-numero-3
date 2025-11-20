@@ -63,17 +63,25 @@ app.get('/', (_req, res) => {
   });
 });
 
-// Endpoint de debug para verificar variáveis de ambiente (apenas em desenvolvimento)
+// Endpoint de debug para verificar variáveis de ambiente
 app.get('/debug/env', (_req, res) => {
   const envVars = Object.keys(process.env).sort();
+  const isRailway = !!process.env.RAILWAY_ENVIRONMENT 
+    || !!process.env.RAILWAY_PROJECT_ID 
+    || !!process.env.RAILWAY_SERVICE_NAME;
+  
   const envData: Record<string, any> = {
     total: envVars.length,
+    isRailway: isRailway,
     hasJWT_SECRET: !!process.env.JWT_SECRET,
     hasDATABASE_URL: !!process.env.DATABASE_URL,
     JWT_SECRET_length: process.env.JWT_SECRET?.length || 0,
     DATABASE_URL_length: process.env.DATABASE_URL?.length || 0,
     JWT_SECRET_preview: process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 10) + '...' : 'UNDEFINED',
+    env_jwtSecret_length: env.jwtSecret?.length || 0,
+    env_jwtSecret_preview: env.jwtSecret ? env.jwtSecret.substring(0, 20) + '...' : 'UNDEFINED',
     allVars: envVars,
+    railwayVars: envVars.filter(v => v.toUpperCase().includes('RAILWAY')),
   };
   res.json(envData);
 });
