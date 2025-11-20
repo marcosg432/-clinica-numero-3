@@ -1,13 +1,22 @@
 // Inicializar banco de dados automaticamente em produção
-// Isso executa migrações e seed na primeira inicialização
-if (process.env.NODE_ENV === 'production' && process.env.RAILWAY_ENVIRONMENT) {
-  // Executar em background para não bloquear o início do servidor
-  import('../scripts/init-db')
-    .then((initDb) => initDb.default())
-    .catch((error) => {
-      console.error('⚠️  Erro ao inicializar banco de dados:', error);
-      // Não bloquear - servidor iniciará mesmo com erro
-    });
+// Executa em background para não bloquear o início do servidor
+// O servidor inicia primeiro e o health check funciona imediatamente
+if (process.env.NODE_ENV === 'production') {
+  // Usar setTimeout para executar após o servidor iniciar
+  setTimeout(() => {
+    import('../scripts/init-db')
+      .then((initDb) => {
+        console.log('🔄 Iniciando setup automático do banco de dados...');
+        return initDb.default();
+      })
+      .then(() => {
+        console.log('✅ Setup automático do banco concluído');
+      })
+      .catch((error) => {
+        console.error('⚠️  Erro ao inicializar banco de dados (não crítico):', error);
+        // Não bloquear - servidor continuará rodando
+      });
+  }, 5000); // Espera 5 segundos para o servidor iniciar completamente
 }
 
 import express from 'express';
@@ -35,19 +44,23 @@ const app = express();
 
 // Health check - PRIMEIRO, antes de qualquer middleware
 // Deve ser acessível mesmo se outros middlewares falharem
+// SEM dependências de qualquer tipo
 app.get('/health', (_req, res) => {
-  try {
-    res.status(200).json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime()
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      status: 'error', 
-      message: 'Health check failed'
-    });
-  }
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    env: process.env.NODE_ENV || 'unknown'
+  });
+});
+
+// Health check alternativo - root path também funciona como health check
+app.get('/', (_req, res) => {
+  res.status(200).json({ 
+    status: 'ok',
+    message: 'Clínica Odonto Azul API',
+    health: '/health'
+  });
 });
 
 // Middlewares de segurança
@@ -100,8 +113,15 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 const server = app.listen(PORT, HOST, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  console.log(`🌐 Host: ${HOST}`);
   console.log(`📚 Documentação Swagger: http://${HOST}:${PORT}/api-docs`);
   console.log(`🏥 Health check: http://${HOST}:${PORT}/health`);
+  console.log(`✅ Servidor pronto para receber requisições`);
+  
+  // Log adicional para confirmar que está escutando
+  server.on('listening', () => {
+    console.log(`✅ Servidor escutando em ${HOST}:${PORT}`);
+  });
 });
 
 // Tratamento de erros do servidor
