@@ -9,7 +9,34 @@ import swaggerUi from 'swagger-ui-express';
 import publicRoutes from './routes/publicRoutes';
 import adminRoutes from './routes/adminRoutes';
 
+// Tratamento de erros não capturados
+process.on('uncaughtException', (error: Error) => {
+  console.error('❌ Erro não capturado:', error);
+  // Não encerrar o processo imediatamente para permitir que o health check funcione
+});
+
+process.on('unhandledRejection', (reason: unknown) => {
+  console.error('❌ Promise rejeitada não tratada:', reason);
+});
+
 const app = express();
+
+// Health check - PRIMEIRO, antes de qualquer middleware
+// Deve ser acessível mesmo se outros middlewares falharem
+app.get('/health', (_req, res) => {
+  try {
+    res.status(200).json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Health check failed'
+    });
+  }
+});
 
 // Middlewares de segurança
 app.use(helmet({
@@ -42,11 +69,6 @@ app.get('/dashboard', (_req, res) => {
 
 // Documentação Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// Health check
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 // Rotas
 app.use('/api', publicRoutes);
