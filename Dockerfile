@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 
 # Instalar OpenSSL e outras dependências necessárias
-RUN apk add --no-cache openssl1.1-compat libc6-compat
+RUN apk add --no-cache openssl openssl-dev libc6-compat
 
 WORKDIR /app
 
@@ -29,7 +29,7 @@ RUN npm run build
 FROM node:20-alpine
 
 # Instalar OpenSSL no container de produção
-RUN apk add --no-cache openssl1.1-compat libc6-compat
+RUN apk add --no-cache openssl openssl-dev libc6-compat
 
 WORKDIR /app
 
