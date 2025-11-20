@@ -62,7 +62,7 @@ if (!jwtSecret) {
 // Tentar ler DATABASE_URL de múltiplas formas
 let databaseUrl = process.env.DATABASE_URL || null;
 
-// Se não encontrado e estamos no Railway, usar valor padrão para SQLite
+// Se não encontrado, usar valor padrão para SQLite
 if (!databaseUrl) {
   if (isRailway) {
     console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
@@ -72,14 +72,18 @@ if (!databaseUrl) {
     console.error('❌ Valor: file:./prisma/database.db');
     console.error('❌ Tipo: SERVICE VARIABLE (não Shared ou Project)');
     console.error('❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌');
-    // Valor padrão para SQLite no Railway
-    databaseUrl = 'file:./prisma/database.db';
-    console.warn('⚠️ Usando valor padrão temporário:', databaseUrl);
-    console.warn('⚠️ CONFIGURE DATABASE_URL CORRETAMENTE NO RAILWAY!');
-  } else {
-    // Em desenvolvimento local, usar valor padrão
-    databaseUrl = 'file:./prisma/database.db';
   }
+  // Valor padrão para SQLite (funciona tanto no Railway quanto local)
+  databaseUrl = 'file:./prisma/database.db';
+  // IMPORTANTE: Definir no process.env para o Prisma conseguir ler
+  process.env.DATABASE_URL = databaseUrl;
+  console.warn('⚠️ Usando valor padrão temporário:', databaseUrl);
+  if (isRailway) {
+    console.warn('⚠️ CONFIGURE DATABASE_URL CORRETAMENTE NO RAILWAY!');
+  }
+} else {
+  // Se encontrou, garantir que está no process.env (para o Prisma)
+  process.env.DATABASE_URL = databaseUrl;
 }
 
 export const env = {
