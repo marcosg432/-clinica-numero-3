@@ -156,18 +156,19 @@
             color: var(--primary-blue);
         }
 
-        /* Botão Menu Mobile - SOLUÇÃO SIMPLES: SEMPRE VISÍVEL POR PADRÃO */
+        /* Botão Menu Mobile - FORÇAR VISIBILIDADE SEMPRE */
         .menu-toggle {
+            /* FORÇAR: Aparecer SEMPRE, mesmo sem JavaScript */
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
-            background: transparent !important;
-            border: 2px solid #0D5B82 !important;
+            background: #FF0000 !important;
+            border: 3px solid #000000 !important;
             cursor: pointer !important;
             padding: 0.5rem !important;
-            color: var(--primary-blue) !important;
+            color: white !important;
             font-size: 1.5rem !important;
-            z-index: 99999 !important;
+            z-index: 999999 !important;
             position: relative !important;
             width: 40px !important;
             height: 40px !important;
@@ -178,12 +179,26 @@
             justify-content: center !important;
             flex-direction: column !important;
             margin: 0 !important;
-            top: 0 !important;
-            right: 0 !important;
             box-sizing: border-box !important;
         }
+        
+        /* Garantir que spans apareçam */
+        .menu-toggle span {
+            display: block !important;
+            width: 25px !important;
+            height: 3px !important;
+            background-color: #FFFFFF !important;
+            margin: 3px 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
 
-        /* JavaScript vai esconder em telas grandes via inline style */
+        /* Esconder apenas em telas MUITO grandes (>1200px) */
+        @media screen and (min-width: 1201px) {
+            .menu-toggle {
+                display: none !important;
+            }
+        }
 
         .menu-toggle:focus {
             outline: 2px solid var(--cta-focus);
@@ -783,15 +798,16 @@
     </style>
 </head>
 <body>
-    <!-- TESTE: Verificar se o body está carregando -->
+    <!-- TESTE CRÍTICO: Alert para verificar se script executa -->
     <script>
-        console.log('🔴 TESTE: Body carregado!');
+        alert('TESTE: Script executando! Se você vê isso, o JS funciona!');
+        console.log('🔴🔴🔴 TESTE: Body carregado! 🔴🔴🔴');
         console.log('🔴 TESTE: document.body existe?', !!document.body);
     </script>
     
     <!-- SCRIPT DO MENU HAMBÚRGUER - SOLUÇÃO DEFINITIVA -->
     <script>
-        console.log('🍔 ===== INICIANDO MENU HAMBÚRGUER =====');
+        console.log('🍔🍔🍔 ===== INICIANDO MENU HAMBÚRGUER ===== 🍔🍔🍔');
         console.log('🍔 TESTE: Script executando!');
         
         function setupMenu() {
