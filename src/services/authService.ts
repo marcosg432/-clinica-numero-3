@@ -49,12 +49,34 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
     // Buscar usuário
     console.log('🔍 Buscando usuário no banco de dados...');
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    console.log('📊 Tentando conectar ao banco de dados...');
+    
+    let user;
+    try {
+      // Verificar se o Prisma está conectado
+      await prisma.$connect();
+      console.log('✅ Prisma conectado com sucesso');
+      
+      user = await prisma.user.findUnique({
+        where: { email },
+      });
+      console.log('✅ Query executada com sucesso');
+    } catch (dbError: any) {
+      console.error('❌ Erro ao conectar ou consultar banco de dados:', dbError);
+      console.error('❌ Mensagem de erro:', dbError.message);
+      console.error('❌ Stack trace:', dbError.stack);
+      console.error('❌ DATABASE_URL:', process.env.DATABASE_URL ? 'PRESENTE' : 'AUSENTE');
+      throw new AppError(`Erro ao acessar banco de dados: ${dbError.message}`, 500);
+    }
 
     if (!user) {
       console.log('❌ Usuário não encontrado:', email);
+      // Verificar se há algum usuário no banco
+      const totalUsers = await prisma.user.count();
+      console.log(`📊 Total de usuários no banco: ${totalUsers}`);
+      if (totalUsers === 0) {
+        console.error('⚠️ NENHUM USUÁRIO NO BANCO! O banco precisa ser populado.');
+      }
       throw new AppError('Email ou senha incorretos', 401);
     }
 
@@ -98,15 +120,28 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
         role: user.role,
       },
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Erro no login:', error);
+    console.error('❌ Tipo do erro:', error?.constructor?.name);
+    console.error('❌ Mensagem do erro:', error?.message);
+    console.error('❌ Stack trace:', error?.stack);
+    
     // Se já é um AppError, re-lança
     if (error instanceof AppError) {
       throw error;
     }
-    // Se é um erro do Prisma ou outro erro inesperado, lança como erro interno
+    
+    // Se é um erro do Prisma
+    if (error?.code && error.code.startsWith('P')) {
+      console.error('❌ Erro do Prisma detectado:', error.code);
+      console.error('❌ Mensagem do Prisma:', error.message);
+      throw new AppError(`Erro no banco de dados: ${error.message}`, 500);
+    }
+    
+    // Se é um erro inesperado, lança como erro interno com mais detalhes
     console.error('❌ Erro inesperado no login:', error);
-    throw new AppError('Erro interno do servidor durante o login', 500);
+    const errorMessage = error?.message || 'Erro desconhecido';
+    throw new AppError(`Erro interno do servidor durante o login: ${errorMessage}`, 500);
   }
 };
 
