@@ -2,7 +2,11 @@
 FROM node:20-alpine AS builder
 
 # Instalar OpenSSL e outras dependências necessárias
-RUN apk add --no-cache openssl openssl-dev libc6-compat
+RUN apk add --no-cache openssl openssl-dev libc6-compat python3 make g++
+
+# Variáveis de ambiente para reduzir uso de memória
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+ENV npm_config_cache=/tmp/.npm
 
 WORKDIR /app
 
@@ -10,8 +14,9 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instalar dependências
-RUN npm ci
+# Instalar dependências e limpar cache
+RUN npm ci --no-audit --no-fund && \
+    npm cache clean --force
 
 # Copiar código fonte
 COPY . .
@@ -33,17 +38,20 @@ RUN apk add --no-cache openssl openssl-dev libc6-compat
 
 WORKDIR /app
 
-# Instalar apenas dependências de produção
+# Copiar arquivos de dependências
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm ci --only=production
 
-# Gerar Prisma Client novamente no ambiente de produção
+# Instalar apenas dependências de produção e limpar cache
+RUN npm ci --only=production --no-audit --no-fund && \
+    npm cache clean --force
+
+# Gerar Prisma Client no ambiente de produção
 RUN npx prisma generate
 
-# Copiar arquivos compilados
+# Copiar arquivos compilados do builder
 COPY --from=builder /app/dist ./dist
-# Prisma Client já foi gerado no estágio de produção, não precisa copiar
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Criar diretório de uploads
 RUN mkdir -p uploads
