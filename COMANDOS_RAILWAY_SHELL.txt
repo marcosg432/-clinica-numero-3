@@ -1,0 +1,34 @@
+===========================================
+COMANDOS PARA EXECUTAR NO SHELL DO RAILWAY
+===========================================
+
+Após criar o projeto e adicionar PostgreSQL no Railway:
+
+1. Vá em "Deployments" → "..." → "Open Shell"
+
+2. Execute estes comandos (um por vez):
+
+# Atualizar schema para PostgreSQL
+sed -i 's/provider = "sqlite"/provider = "postgresql"/' prisma/schema.prisma
+
+# Ajustar tipos de array
+sed -i 's/String   @default("\[\]")/String[]  @default([])/' prisma/schema.prisma
+sed -i 's/String  @default("\[\]")/String[] @default([])/' prisma/schema.prisma
+
+# Remover @db.Text (não necessário no PostgreSQL)
+sed -i 's/@db.Text//' prisma/schema.prisma
+
+# Gerar Prisma Client
+npx prisma generate
+
+# Executar migrações
+npx prisma migrate deploy
+
+# Popular banco com dados iniciais
+npx prisma db seed
+
+===========================================
+PRONTO! Banco configurado e populado! ✅
+===========================================
+
+

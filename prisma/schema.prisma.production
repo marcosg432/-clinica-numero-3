@@ -24,15 +24,16 @@ model User {
 
 model Treatment {
   id             String   @id @default(uuid())
-  title          String
   slug           String   @unique
+  title          String
   description    String   @db.Text
   fullDescription String?  @map("full_description") @db.Text
   price          Float?
+  heroImage      String?  @map("hero_image")
+  gallery        String[] @default([])
+  benefits       String[] @default([])
+  observations   String?  @db.Text
   isActive       Boolean  @default(true) @map("is_active")
-  gallery       String[]  @default([])
-  benefits      String[]  @default([])
-  observations  String?  @db.Text
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
@@ -48,12 +49,16 @@ model Appointment {
   phone             String
   email             String
   selectedTreatments String[] @map("selected_treatments")
-  datePreferred     DateTime? @map("date_preferred")
-  timePreferred     String?   @map("time_preferred")
-  status            String   @default("pending")
+  datePreferred     String?  @map("date_preferred")
+  timePreferred     String?  @map("time_preferred")
   notes             String?  @db.Text
+  status            String   @default("pending")
+  honeypot          String?
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
+
+  treatmentId       String?  @map("treatment_id")
+  treatment         Treatment? @relation(fields: [treatmentId], references: [id])
 
   @@map("appointments")
 }
@@ -75,11 +80,13 @@ model Review {
 
 model ClinicInfo {
   id          String   @id @default(uuid())
-  name        String
   address     String
   phone       String
-  email       String
-  workingHours String?  @map("working_hours") @db.Text
+  email       String?
+  whatsapp    String?
+  instagram   String?
+  facebook    String?
+  workingHours String? @map("working_hours") @db.Text
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

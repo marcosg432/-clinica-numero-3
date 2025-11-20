@@ -1,0 +1,49 @@
+# Railway ignore file
+# Arquivos e pastas que não devem ser enviados ao Railway
+
+# Dependências (serão instaladas via npm ci)
+node_modules/
+
+# Arquivos de desenvolvimento
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Banco de dados local
+prisma/dev.db
+prisma/dev.db-journal
+
+# Builds locais
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Arquivos de ambiente locais
+.env.local
+.env.development
+.env.test
+
+# Git
+.git/
+.gitignore
+
+# Documentação (opcional - pode remover se quiser manter no Railway)
+*.md
+!README.md
+
+# Scripts locais (manter apenas os necessários)
+start-server.ps1
+fazer-push.ps1
+
+# Uploads locais (serão criados no Railway)
+uploads/*
+!uploads/.gitkeep
+
+# Vercel
+.vercel/
+
