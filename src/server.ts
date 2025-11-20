@@ -1,3 +1,15 @@
+// Inicializar banco de dados automaticamente em produção
+// Isso executa migrações e seed na primeira inicialização
+if (process.env.NODE_ENV === 'production' && process.env.RAILWAY_ENVIRONMENT) {
+  // Executar em background para não bloquear o início do servidor
+  import('../scripts/init-db')
+    .then((initDb) => initDb.default())
+    .catch((error) => {
+      console.error('⚠️  Erro ao inicializar banco de dados:', error);
+      // Não bloquear - servidor iniciará mesmo com erro
+    });
+}
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

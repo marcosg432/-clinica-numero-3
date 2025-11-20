@@ -9,6 +9,7 @@
     "build:vercel": "echo 'Frontend build - static files only'",
     "build:railway": "node scripts/prepare-railway.js && npm run build && npx prisma generate",
     "start": "node dist/server.js",
+    "start:with-db-init": "node scripts/init-db.js && node dist/server.js",
     "postinstall": "prisma generate",
     "railway:prepare": "node scripts/prepare-railway.js",
     "railway:setup": "node scripts/prepare-railway.js && npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
