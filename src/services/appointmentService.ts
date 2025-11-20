@@ -146,7 +146,8 @@ export const updateAppointmentStatus = async (
   id: string,
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
 ) => {
-  const appointment = await getAppointmentById(id);
+  // Verificar se existe (lança erro se não encontrar)
+  await getAppointmentById(id);
 
   return await prisma.appointment.update({
     where: { id },

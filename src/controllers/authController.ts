@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { login } from '../services/authService';
-import { AppError } from '../middleware/errorHandler';
 
 export const loginController = async (
   req: Request,

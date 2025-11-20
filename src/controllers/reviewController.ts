@@ -26,7 +26,7 @@ export const getAllReviewsController = async (
 };
 
 export const getPendingReviewsController = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {

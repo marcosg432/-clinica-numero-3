@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, '../')));
 app.use('/dashboard', express.static(path.join(__dirname, '../public')));
 
 // Rota para redirecionar /dashboard para login
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', (_req, res) => {
   res.redirect('/dashboard/admin-login.html');
 });
 
@@ -44,7 +44,7 @@ app.get('/dashboard', (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
@@ -53,7 +53,7 @@ app.use('/api', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' });
 });
 

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { getHomeData, getGallery } from '../services/homeService';
 
 export const getHomeController = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -15,7 +15,7 @@ export const getHomeController = async (
 };
 
 export const getGalleryController = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {

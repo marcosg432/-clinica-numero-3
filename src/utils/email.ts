@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import { env } from '../config/env';
-import { AppError } from '../middleware/errorHandler';
 
 // Configurar transporter
 const transporter = nodemailer.createTransport({

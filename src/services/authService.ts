@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import prisma from '../config/database';
 import { env } from '../config/env';
 import { AppError } from '../middleware/errorHandler';
@@ -39,16 +39,22 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
   }
 
   // Gerar token JWT
+  if (!env.jwtSecret || env.jwtSecret === 'change-me-in-production') {
+    throw new AppError('JWT secret não configurado', 500);
+  }
+
+  const payload = {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  };
+
   const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    },
+    payload,
     env.jwtSecret,
     {
       expiresIn: env.jwtExpiresIn,
-    }
+    } as SignOptions
   );
 
   return {
