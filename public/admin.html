@@ -537,12 +537,21 @@
                     return;
                 }
                 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
-                    throw new Error(errorData.error || `Erro ${response.status}`);
+                // Ler resposta uma única vez
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const textResponse = await response.text();
+                    console.error('❌ Resposta não é JSON:', textResponse.substring(0, 200));
+                    throw new Error(`Resposta inesperada do servidor (${response.status})`);
                 }
                 
-                const treatments = await response.json();
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || data.message || `Erro ${response.status}`);
+                }
+                
+                const treatments = data;
                 
                 // Garantir que treatments é um array
                 if (!Array.isArray(treatments)) {
@@ -631,12 +640,21 @@
                     return;
                 }
                 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
-                    throw new Error(errorData.error || `Erro ${response.status}`);
+                // Ler resposta uma única vez
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const textResponse = await response.text();
+                    console.error('❌ Resposta não é JSON:', textResponse.substring(0, 200));
+                    throw new Error(`Resposta inesperada do servidor (${response.status})`);
                 }
                 
-                const appointments = await response.json();
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || data.message || `Erro ${response.status}`);
+                }
+                
+                const appointments = data;
                 
                 // Garantir que appointments é um array
                 if (!Array.isArray(appointments)) {
@@ -749,12 +767,21 @@
                     return;
                 }
                 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
-                    throw new Error(errorData.error || `Erro ${response.status}`);
+                // Ler resposta uma única vez
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const textResponse = await response.text();
+                    console.error('❌ Resposta não é JSON:', textResponse.substring(0, 200));
+                    throw new Error(`Resposta inesperada do servidor (${response.status})`);
                 }
                 
-                const reviews = await response.json();
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || data.message || `Erro ${response.status}`);
+                }
+                
+                const reviews = data;
                 
                 // Garantir que reviews é um array
                 if (!Array.isArray(reviews)) {
