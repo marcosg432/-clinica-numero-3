@@ -2,6 +2,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Debug: Log de todas as variáveis de ambiente relacionadas a JWT
+console.log('🔍 Debug - Variáveis de ambiente JWT:');
+console.log('  - process.env.JWT_SECRET existe?', !!process.env.JWT_SECRET);
+console.log('  - process.env.JWT_SECRET length:', process.env.JWT_SECRET?.length || 0);
+console.log('  - process.env.JWT_SECRET value (primeiros 10 chars):', process.env.JWT_SECRET?.substring(0, 10) || 'undefined');
+console.log('  - Todas as variáveis de ambiente que começam com JWT:', Object.keys(process.env).filter(key => key.toUpperCase().includes('JWT')));
+
 export const env = {
   port: parseInt(process.env.PORT || process.env.PORT_NUMBER || '3000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
