@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && prisma generate && node -e \"require('fs').existsSync('dist/server.js') ? console.log('✅ dist/server.js criado') : (console.error('❌ dist/server.js não encontrado'), process.exit(1))\"",
+    "build": "tsc && node -e \"require('fs').existsSync('dist/server.js') ? console.log('✅ dist/server.js criado') : (console.error('❌ dist/server.js não encontrado'), process.exit(1))\"",
     "build:vercel": "echo 'Frontend build - static files only'",
     "build:railway": "node scripts/prepare-railway.js && npm run build && npx prisma generate",
     "start": "node dist/server.js",

@@ -2,16 +2,28 @@
 nixPkgs = ["nodejs-20_x", "openssl"]
 
 [phases.install]
+env = [
+  "NODE_OPTIONS=--max-old-space-size=512",
+  "NPM_CONFIG_POSTINSTALL=false"
+]
 cmds = [
-  "npm ci --no-audit --no-fund",
-  "npm cache clean --force"
+  "npm ci --no-audit --no-fund --prefer-offline",
+  "npm cache clean --force",
+  "rm -rf node_modules/.cache"
 ]
 
 [phases.build]
+env = [
+  "NODE_OPTIONS=--max-old-space-size=512",
+  "NPM_CONFIG_POSTINSTALL=false",
+  "PRISMA_SKIP_POSTINSTALL_GENERATE=true"
+]
 cmds = [
   "npm run railway:prepare || true",
   "npx prisma generate",
-  "npm run build"
+  "npm run build",
+  "npm prune --production",
+  "rm -rf node_modules/.cache"
 ]
 
 [start]
