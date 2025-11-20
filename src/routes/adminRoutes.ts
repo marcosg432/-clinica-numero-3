@@ -8,6 +8,7 @@ import * as treatmentController from '../controllers/treatmentController';
 import * as appointmentController from '../controllers/appointmentController';
 import * as reviewController from '../controllers/reviewController';
 import * as uploadController from '../controllers/uploadController';
+import * as seedController from '../controllers/seedController';
 
 const router = Router();
 
@@ -22,6 +23,9 @@ router.post(
 // Todas as rotas abaixo requerem autenticação
 router.use(authenticate);
 router.use(requireAdmin);
+
+// Seed do banco de dados (popular com dados iniciais)
+router.post('/seed', apiLimiter, seedController.runSeedController);
 
 // Upload de imagens
 router.post(

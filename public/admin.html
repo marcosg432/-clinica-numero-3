@@ -331,6 +331,7 @@
             <button class="tab active" onclick="switchTab('treatments')">Tratamentos</button>
             <button class="tab" onclick="switchTab('appointments')">Agendamentos</button>
             <button class="tab" onclick="switchTab('reviews')">Avaliações</button>
+            <button class="tab" onclick="switchTab('settings')">Configurações</button>
         </div>
 
         <!-- Tab: Tratamentos -->
@@ -368,6 +369,24 @@
                     <button class="btn btn-primary" onclick="openReviewModal()">+ Nova Avaliação</button>
                 </div>
                 <div id="reviewsList" class="loading">Carregando avaliações...</div>
+            </div>
+        </div>
+
+        <!-- Tab: Configurações -->
+        <div id="settings" class="tab-content">
+            <div class="section">
+                <h2>Configurações do Sistema</h2>
+                <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
+                    <h3 style="margin-bottom: 15px; color: #2C3E50;">Popular Banco de Dados</h3>
+                    <p style="color: #5D6D7E; margin-bottom: 20px;">
+                        Este botão irá popular o banco de dados com dados iniciais, incluindo:
+                        usuários admin, tratamentos de exemplo, avaliações e informações da clínica.
+                    </p>
+                    <button class="btn btn-primary" onclick="runSeed()" id="seedBtn" style="background: #28a745; padding: 12px 24px;">
+                        🌱 Popular Banco de Dados
+                    </button>
+                    <div id="seedMessage" style="margin-top: 15px;"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -1001,6 +1020,79 @@
                 }
             } catch (error) {
                 alert('Erro: ' + error.message);
+            }
+        }
+
+        // Executar seed do banco de dados
+        async function runSeed() {
+            const token = localStorage.getItem('adminToken');
+            const btn = document.getElementById('seedBtn');
+            const messageDiv = document.getElementById('seedMessage');
+            
+            if (!token) {
+                alert('Você precisa estar logado para executar esta ação');
+                return;
+            }
+
+            if (!confirm('Tem certeza que deseja popular o banco de dados? Isso criará usuários admin, tratamentos e avaliações de exemplo.')) {
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Populando banco de dados...';
+            messageDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/seed`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    messageDiv.innerHTML = `
+                        <div style="background: #D4EDDA; color: #155724; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                            <strong>✅ Sucesso!</strong><br>
+                            Banco de dados populado com sucesso!<br>
+                            - ${result.data.users} usuário(s) criado(s)<br>
+                            - ${result.data.treatments} tratamento(s) criado(s)<br>
+                            - ${result.data.reviews} avaliação(ões) criada(s)<br>
+                            <br>
+                            <strong>Recarregue a página para ver os novos dados.</strong>
+                        </div>
+                    `;
+                    
+                    // Recarregar as listas após 2 segundos
+                    setTimeout(() => {
+                        if (document.getElementById('treatments').classList.contains('active')) {
+                            loadTreatments();
+                        }
+                        if (document.getElementById('reviews').classList.contains('active')) {
+                            loadReviews();
+                        }
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = `
+                        <div style="background: #F8D7DA; color: #721C24; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                            <strong>❌ Erro!</strong><br>
+                            ${result.error || result.message || 'Erro ao popular banco de dados'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `
+                    <div style="background: #F8D7DA; color: #721C24; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                        <strong>❌ Erro!</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🌱 Popular Banco de Dados';
             }
         }
 
