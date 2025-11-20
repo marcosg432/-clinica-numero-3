@@ -169,6 +169,23 @@
             justify-content: center;
         }
 
+        /* Mostrar botão hambúrguer e esconder nav em telas médias e menores */
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .nav-links {
+                display: none !important;
+            }
+
+            .nav-links.active {
+                display: flex !important;
+            }
+        }
+
         .menu-toggle:focus {
             outline: 2px solid var(--cta-focus);
             outline-offset: 2px;
@@ -652,6 +669,16 @@
                 opacity: 1 !important;
             }
 
+            .menu-toggle span {
+                display: block !important;
+                width: 25px;
+                height: 3px;
+                background-color: var(--primary-blue);
+                margin: 3px 0;
+                transition: all 0.3s ease;
+                border-radius: 2px;
+            }
+
             .nav-links {
                 display: none;
                 position: absolute;
@@ -1005,17 +1032,21 @@
     </script>
     <script>
         // Menu Mobile Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
 
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                const isActive = navLinks.classList.contains('active');
-                
-                navLinks.classList.toggle('active');
-                menuToggle.classList.toggle('active');
-                menuToggle.setAttribute('aria-expanded', !isActive);
-                
+            if (menuToggle && navLinks) {
+                // Toggle menu quando clicar no botão hambúrguer
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevenir que o click fora seja acionado imediatamente
+                    const isActive = navLinks.classList.contains('active');
+                    
+                    navLinks.classList.toggle('active');
+                    menuToggle.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', !isActive);
+                });
+
                 // Fechar menu quando clicar em um link
                 const links = navLinks.querySelectorAll('a');
                 links.forEach(link => {
@@ -1025,17 +1056,24 @@
                         menuToggle.setAttribute('aria-expanded', 'false');
                     });
                 });
-            });
 
-            // Fechar menu ao clicar fora
-            document.addEventListener('click', (e) => {
-                if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
-                    navLinks.classList.remove('active');
-                    menuToggle.classList.remove('active');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', (e) => {
+                    if (navLinks.classList.contains('active') && 
+                        !menuToggle.contains(e.target) && 
+                        !navLinks.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Prevenir que o menu se feche ao clicar dentro dele
+                navLinks.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+        });
     </script>
 </body>
 </html>
