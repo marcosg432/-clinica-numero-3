@@ -156,9 +156,9 @@
             color: var(--primary-blue);
         }
 
-        /* Botão Menu Mobile - SEMPRE VISÍVEL por padrão em mobile */
+        /* Botão Menu Mobile - VISÍVEL por padrão, esconder apenas em telas grandes */
         .menu-toggle {
-            display: none;
+            display: flex !important;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -175,30 +175,23 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
-        /* Esconder menu normal e mostrar hambúrguer em telas menores */
-        @media screen and (max-width: 1200px) {
-            .nav-links {
+        /* Esconder botão hambúrguer APENAS em telas grandes */
+        @media screen and (min-width: 1201px) {
+            .menu-toggle {
                 display: none !important;
             }
-        }
 
-        /* MOSTRAR botão hambúrguer em telas menores */
-        @media screen and (max-width: 1200px) {
-            .menu-toggle {
+            .nav-links {
                 display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                flex-direction: column !important;
             }
         }
 
-        /* Garantir que apareça em qualquer tela menor - múltiplos breakpoints */
-        @media screen and (max-width: 1024px),
-               screen and (max-width: 992px),
-               screen and (max-width: 768px),
-               screen and (max-width: 480px) {
+        /* Mostrar hambúrguer e esconder nav em telas menores */
+        @media screen and (max-width: 1200px) {
             .menu-toggle {
                 display: flex !important;
                 visibility: visible !important;
@@ -208,6 +201,10 @@
 
             .nav-links {
                 display: none !important;
+            }
+
+            .nav-links.active {
+                display: flex !important;
             }
         }
 
@@ -219,13 +216,23 @@
 
         .menu-toggle span {
             display: block !important;
-            width: 25px;
-            height: 3px;
+            width: 25px !important;
+            height: 3px !important;
             background: var(--primary-blue) !important;
-            margin: 3px 0;
+            margin: 3px 0 !important;
             transition: all 0.3s ease;
             border-radius: 2px;
             position: relative;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Garantir que os spans apareçam SEMPRE */
+        .menu-toggle span:nth-child(1),
+        .menu-toggle span:nth-child(2),
+        .menu-toggle span:nth-child(3) {
+            display: block !important;
+            background-color: var(--primary-blue) !important;
         }
 
         .menu-toggle.active span:nth-child(1) {
@@ -937,32 +944,49 @@
     <!-- MENU HAMBÚRGUER - EXECUTAR PRIMEIRO, ANTES DE QUALQUER COISA -->
     <script>
         // Menu Mobile Toggle - EXECUTAR IMEDIATAMENTE, SEM ESPERAR DOMContentLoaded
+        console.log('🍔 Iniciando script do menu hambúrguer...');
         (function() {
             function initMenu() {
+                console.log('🍔 initMenu() chamado');
                 const menuToggle = document.getElementById('menuToggle');
                 const navLinks = document.getElementById('navLinks');
 
+                console.log('🍔 menuToggle encontrado?', !!menuToggle);
+                console.log('🍔 navLinks encontrado?', !!navLinks);
+
                 if (!menuToggle || !navLinks) {
-                    // Se elementos ainda não existem, tentar novamente
+                    console.log('🍔 Elementos não encontrados, tentando novamente...');
                     setTimeout(initMenu, 100);
                     return;
                 }
 
+                console.log('🍔 Elementos encontrados! Configurando menu...');
+
                 // Função para verificar tamanho da tela e mostrar/esconder menu
                 function checkScreenSize() {
                     const width = window.innerWidth || document.documentElement.clientWidth;
+                    console.log('🍔 Largura da tela:', width);
                     
                     if (width <= 1200) {
+                        console.log('🍔 Tela <= 1200px - Mostrando botão hambúrguer');
                         // Mostrar botão hambúrguer e esconder nav
                         menuToggle.style.display = 'flex';
                         menuToggle.style.visibility = 'visible';
                         menuToggle.style.opacity = '1';
                         menuToggle.style.flexDirection = 'column';
+                        menuToggle.style.position = 'relative';
+                        menuToggle.style.zIndex = '1001';
                         
                         if (!navLinks.classList.contains('active')) {
                             navLinks.style.display = 'none';
                         }
+                        console.log('🍔 Botão hambúrguer configurado:', {
+                            display: menuToggle.style.display,
+                            visibility: menuToggle.style.visibility,
+                            opacity: menuToggle.style.opacity
+                        });
                     } else {
+                        console.log('🍔 Tela > 1200px - Escondendo botão hambúrguer');
                         // Esconder botão hambúrguer e mostrar nav
                         menuToggle.style.display = 'none';
                         navLinks.style.display = 'flex';
