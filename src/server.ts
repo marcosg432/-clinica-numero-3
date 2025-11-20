@@ -1,23 +1,5 @@
-// Inicializar banco de dados automaticamente em produção
-// Executa em background para não bloquear o início do servidor
-// O servidor inicia primeiro e o health check funciona imediatamente
-if (process.env.NODE_ENV === 'production') {
-  // Usar setTimeout para executar após o servidor iniciar
-  setTimeout(() => {
-    import('../scripts/init-db')
-      .then((initDb) => {
-        console.log('🔄 Iniciando setup automático do banco de dados...');
-        return initDb.default();
-      })
-      .then(() => {
-        console.log('✅ Setup automático do banco concluído');
-      })
-      .catch((error) => {
-        console.error('⚠️  Erro ao inicializar banco de dados (não crítico):', error);
-        // Não bloquear - servidor continuará rodando
-      });
-  }, 5000); // Espera 5 segundos para o servidor iniciar completamente
-}
+// Nota: Inicialização do banco de dados será feita via script separado
+// ou manualmente via shell do Railway após o primeiro deploy
 
 import express from 'express';
 import cors from 'cors';
