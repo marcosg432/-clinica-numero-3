@@ -2,7 +2,7 @@
 // ou manualmente via shell do Railway após o primeiro deploy
 
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import path from 'path';
 import { env } from './config/env';
@@ -51,8 +51,8 @@ app.use(helmet({
 }));
 
 // Configurar CORS para aceitar URLs do Vercel e da lista configurada
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+const corsOptions: CorsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void => {
     // Permitir requisições sem origem (mobile apps, curl, etc.)
     if (!origin) {
       callback(null, true);
