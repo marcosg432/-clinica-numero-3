@@ -1,6 +1,21 @@
 // Nota: Inicialização do banco de dados será feita via script separado
 // ou manualmente via shell do Railway após o primeiro deploy
 
+// ⚠️ CRÍTICO: Definir DATABASE_URL ANTES de qualquer importação do Prisma
+// O Prisma Client valida DATABASE_URL no momento da importação
+if (!process.env.DATABASE_URL) {
+  const isRailway = !!process.env.RAILWAY_ENVIRONMENT 
+    || !!process.env.RAILWAY_PROJECT_ID 
+    || !!process.env.RAILWAY_SERVICE_NAME;
+  
+  if (isRailway) {
+    console.warn('⚠️ DATABASE_URL não encontrada. Usando valor padrão para SQLite.');
+    console.warn('⚠️ Configure DATABASE_URL no Railway: file:./prisma/database.db');
+  }
+  // Definir valor padrão para SQLite
+  process.env.DATABASE_URL = 'file:./prisma/database.db';
+}
+
 // LOG DEBUG IMEDIATO - ANTES DE QUALQUER IMPORTAÇÃO
 console.log('═══════════════════════════════════════════════════════');
 console.log('🚀 SERVIDOR INICIANDO - DEBUG DE VARIÁVEIS DE AMBIENTE');
@@ -11,6 +26,7 @@ console.log('📋 JWT_SECRET existe?', !!process.env.JWT_SECRET);
 console.log('📋 JWT_SECRET length:', process.env.JWT_SECRET?.length || 0);
 console.log('📋 JWT_SECRET valor:', process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 20) + '...' : 'UNDEFINED');
 console.log('📋 DATABASE_URL existe?', !!process.env.DATABASE_URL);
+console.log('📋 DATABASE_URL valor:', process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 50) + '...' : 'UNDEFINED');
 console.log('📋 Total de variáveis de ambiente:', Object.keys(process.env).length);
 console.log('📋 TODAS as variáveis:', JSON.stringify(Object.keys(process.env).sort(), null, 2));
 console.log('═══════════════════════════════════════════════════════');
