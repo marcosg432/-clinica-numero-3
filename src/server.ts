@@ -273,12 +273,25 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 404 handler - deve ser o último middleware, ANTES do error handler
 app.use((_req, res) => {
+  // Se a requisição é para a API, sempre retornar JSON
+  if (_req.path.startsWith('/api')) {
+    res.status(404).json({ 
+      success: false,
+      error: 'Rota não encontrada',
+      path: _req.path,
+      method: _req.method
+    });
+    return;
+  }
+  
   // Se a requisição é para um arquivo HTML ou começa com /dashboard, tenta servir o arquivo
   if (_req.path.startsWith('/dashboard') || _req.path.endsWith('.html')) {
     res.status(404).send('Página não encontrada');
     return;
   }
-  res.status(404).json({ error: 'Rota não encontrada' });
+  
+  // Para outras rotas, retornar JSON também
+  res.status(404).json({ error: 'Rota não encontrada', path: _req.path });
 });
 
 // Error handler (deve ser o último middleware)
