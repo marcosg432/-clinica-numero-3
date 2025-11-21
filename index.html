@@ -156,44 +156,64 @@
             color: var(--primary-blue);
         }
 
-        /* Botão Menu Mobile - FORÇAR VISIBILIDADE SEMPRE */
+        /* Botão Menu Mobile - SEMPRE VISÍVEL em mobile */
         .menu-toggle {
-            /* FORÇAR: Aparecer SEMPRE, mesmo sem JavaScript */
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            background: #FF0000 !important;
-            border: 3px solid #000000 !important;
-            cursor: pointer !important;
-            padding: 0.5rem !important;
-            color: white !important;
-            font-size: 1.5rem !important;
-            z-index: 999999 !important;
-            position: relative !important;
-            width: 40px !important;
-            height: 40px !important;
-            min-width: 40px !important;
-            min-height: 40px !important;
-            flex-shrink: 0 !important;
-            align-items: center !important;
-            justify-content: center !important;
-            flex-direction: column !important;
-            margin: 0 !important;
-            box-sizing: border-box !important;
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            z-index: 1000;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
         
-        /* Garantir que spans apareçam */
         .menu-toggle span {
-            display: block !important;
-            width: 25px !important;
-            height: 3px !important;
-            background-color: #FFFFFF !important;
-            margin: 3px 0 !important;
-            opacity: 1 !important;
-            visibility: visible !important;
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            margin: 3px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
         }
 
-        /* Esconder apenas em telas MUITO grandes (>1200px) */
+        /* Mostrar botão hambúrguer em telas menores que 1200px */
+        @media screen and (max-width: 1200px) {
+            .menu-toggle {
+                display: flex !important;
+            }
+            
+            .nav-links {
+                display: none !important;
+            }
+            
+            .nav-links.active {
+                display: flex !important;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: var(--shadow-lg);
+                border-top: 1px solid var(--border-card);
+                margin-top: 1rem;
+                z-index: 999;
+            }
+        }
+        
+        /* Esconder em telas grandes */
         @media screen and (min-width: 1201px) {
             .menu-toggle {
                 display: none !important;
@@ -798,99 +818,82 @@
     </style>
 </head>
 <body>
-    <!-- TESTE CRÍTICO: Alert para verificar se script executa -->
+    <!-- SCRIPT DO MENU HAMBÚRGUER -->
     <script>
-        alert('TESTE: Script executando! Se você vê isso, o JS funciona!');
-        console.log('🔴🔴🔴 TESTE: Body carregado! 🔴🔴🔴');
-        console.log('🔴 TESTE: document.body existe?', !!document.body);
-    </script>
-    
-    <!-- SCRIPT DO MENU HAMBÚRGUER - SOLUÇÃO DEFINITIVA -->
-    <script>
-        console.log('🍔🍔🍔 ===== INICIANDO MENU HAMBÚRGUER ===== 🍔🍔🍔');
-        console.log('🍔 TESTE: Script executando!');
-        
-        function setupMenu() {
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (!menuToggle) {
-                console.log('🍔 menuToggle NÃO encontrado, tentando em 100ms...');
-                setTimeout(setupMenu, 100);
-                return;
-            }
-            
-            console.log('🍔 ✅ menuToggle ENCONTRADO!', menuToggle);
-            
-            const width = window.innerWidth || document.documentElement.clientWidth;
-            console.log('🍔 Largura da tela:', width);
-            
-            // FORÇAR visibilidade SEMPRE primeiro
-            menuToggle.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; position: relative !important; z-index: 99999 !important; background: transparent !important; border: 2px solid #0D5B82 !important; cursor: pointer !important; padding: 0.5rem !important;';
-            
-            // FORÇAR spans visíveis
-            const spans = menuToggle.querySelectorAll('span');
-            console.log('🍔 Encontrados', spans.length, 'spans');
-            spans.forEach(function(span, index) {
-                span.style.cssText = 'display: block !important; width: 25px !important; height: 3px !important; background-color: #0D5B82 !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important;';
-                console.log('🍔 Span', index, 'configurado');
-            });
-            
-            // Esconder apenas se tela MUITO grande (>1200px)
-            if (width > 1200) {
-                console.log('🍔 Tela > 1200px - Escondendo botão');
-                menuToggle.style.display = 'none';
-                if (navLinks) navLinks.style.display = 'flex';
-            } else {
-                console.log('🍔 Tela <= 1200px - Mantendo botão VISÍVEL');
-                menuToggle.style.display = 'flex';
-                if (navLinks && !navLinks.classList.contains('active')) {
-                    navLinks.style.display = 'none';
+        (function() {
+            function initMenu() {
+                const menuToggle = document.getElementById('menuToggle');
+                const navLinks = document.getElementById('navLinks');
+                
+                if (!menuToggle || !navLinks) {
+                    setTimeout(initMenu, 100);
+                    return;
                 }
-            }
-            
-            // Click handler
-            menuToggle.onclick = function(e) {
-                e.stopPropagation();
-                console.log('🍔 BOTÃO CLICADO!');
-                if (navLinks) {
-                    navLinks.classList.toggle('active');
-                    if (navLinks.classList.contains('active')) {
-                        navLinks.style.cssText = 'display: flex !important; position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; background: #FFFFFF !important; box-shadow: 0 10px 15px -3px rgba(10, 74, 107, 0.1) !important; flex-direction: column !important; z-index: 9999 !important;';
+                
+                // Verificar tamanho da tela e ajustar
+                function updateMenu() {
+                    const width = window.innerWidth || document.documentElement.clientWidth;
+                    
+                    if (width <= 1200) {
+                        menuToggle.style.display = 'flex';
+                        if (!navLinks.classList.contains('active')) {
+                            navLinks.style.display = 'none';
+                        }
                     } else {
-                        navLinks.style.display = 'none';
+                        menuToggle.style.display = 'none';
+                        navLinks.style.display = 'flex';
+                        navLinks.classList.remove('active');
                     }
                 }
-            };
+                
+                // Toggle menu ao clicar
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                    menuToggle.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                });
+                
+                // Fechar menu ao clicar em link
+                const links = navLinks.querySelectorAll('a');
+                links.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+                
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+                
+                // Atualizar no resize
+                window.addEventListener('resize', updateMenu);
+                updateMenu();
+            }
             
-            console.log('🍔 ✅✅✅ MENU HAMBÚRGUER CONFIGURADO COM SUCESSO! ✅✅✅');
-        }
-        
-        // Executar IMEDIATAMENTE
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupMenu);
-        } else {
-            setupMenu();
-        }
-        
-        window.addEventListener('load', setupMenu);
-        setTimeout(setupMenu, 50);
-        setTimeout(setupMenu, 100);
-        setTimeout(setupMenu, 200);
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMenu);
+            } else {
+                initMenu();
+            }
+        })();
     </script>
-    
-    <!-- TESTE: Botão de teste visível -->
-    <div style="position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; z-index: 999999; font-size: 12px;">TESTE</div>
     
     <!-- Header -->
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo" aria-label="Clínica Odonto Azul - Página inicial">🦷 Clínica Odonto Azul</a>
-            <!-- BOTÃO HAMBÚRGUER - FORÇAR VISIBILIDADE -->
-            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" style="display: flex !important; visibility: visible !important; opacity: 1 !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; position: relative !important; z-index: 99999 !important; background: #FF0000 !important; border: 3px solid #000000 !important; cursor: pointer !important; padding: 0.5rem !important; margin: 0 !important; box-sizing: border-box !important;">
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
-                <span style="display: block !important; width: 25px !important; height: 3px !important; background-color: #FFFFFF !important; margin: 3px 0 !important; border-radius: 2px !important; opacity: 1 !important; visibility: visible !important;"></span>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
             <nav aria-label="Navegação principal">
                 <ul class="nav-links" id="navLinks">
